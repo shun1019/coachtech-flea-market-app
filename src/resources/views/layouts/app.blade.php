@@ -23,7 +23,7 @@
                 @csrf
                 <button type="submit" class="logout-btn">ログアウト</button>
             </form>
-            <form>
+            <form action="{{ route('profile.index') }}" method="GET">
                 <button type="submit" class="mypage-btn">マイページ</button>
             </form>
             <form>

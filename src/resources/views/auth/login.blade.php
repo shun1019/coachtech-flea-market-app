@@ -8,7 +8,6 @@
 
 @section('content')
 <div class="login-form">
-
     <h1>ログイン</h1>
 
     <form action="{{ route('login') }}" method="POST">
@@ -17,7 +16,7 @@
             <label for="email">メールアドレス</label>
             <input type="email" name="email" id="email" value="{{ old('email') }}">
             @error('email')
-            <div class="login-error">{{ $message }}</div>
+            <div class="error">{{ $message }}</div>
             @enderror
         </div>
 
@@ -25,13 +24,13 @@
             <label for="password">パスワード</label>
             <input type="password" name="password" id="password">
             @error('password')
-            <div class="login-error">{{ $message }}</div>
+            <div class="error">{{ $message }}</div>
             @enderror
         </div>
 
-            <button class="login-btn" type="submit">ログインする</button>
+        <button class="login-btn" type="submit">ログインする</button>
     </form>
 
-    <p><a href="{{ ('register') }}">会員登録はこちら</a></p>
+    <p><a href="{{ route('register') }}">会員登録はこちら</a></p>
 </div>
 @endsection
