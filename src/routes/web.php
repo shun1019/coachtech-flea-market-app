@@ -6,6 +6,14 @@ use Illuminate\Support\Facades\Route;
 
 // 商品一覧画面（トップ画面）
 Route::get('/', [ItemController::class, 'index'])->name('index');
+Route::get('/?tab=mylist', [ItemController::class, 'myList'])->name('item.mylist');
+
+// 商品詳細画面
+Route::get('/item/{item_id}', [ItemController::class, 'show'])->name('item.show');
+
+// 商品出品画面
+Route::get('/sell', [ItemController::class, 'create'])->name('sell');
+Route::post('/sell', [ItemController::class, 'store'])->name('store');
 
 // プロフィール画面
 Route::get('/mypage', [ProfileController::class, 'index'])->name('profile.index');
