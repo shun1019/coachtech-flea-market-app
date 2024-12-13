@@ -1,43 +1,60 @@
 @extends('layouts.app')
 
-@section('title', 'プロフィール設定')
+@section('title', 'マイページ')
 
 @section('css')
-<link rel="stylesheet" href="{{ asset('css/mypage/profile.css') }}">
+<link rel="stylesheet" href="{{ asset('css/mypage/home.css') }}">
 @endsection
 
 @section('content')
 <div class="profile-container">
-    <h2 class="profile-title">プロフィール設定</h2>
-    <form class="profile-form">
-        <div class="profile-image__section">
-            <label for="image-upload__btn">
-                <input type="file" name="profile_image">
-                画像を選択する
-            </label>
-        </div>
+    <div class="profile-header">
+        @if($user->profile_image)
+        <img src="{{ asset('storage/' . $user->profile_image) }}" alt="プロフィール画像" class="profile-avatar">
+        @endif
+        <h2 class="profile-name">{{ e($user->username) }}</h2>
+        <a href="{{ route('profile.edit') }}" class="edit-profile-btn">プロフィールを編集</a>
+    </div>
 
-        <div class="profile-form__group">
-            <label for="username">ユーザー名</label>
-            <input type="text" id="username" value="{{ old('username', auth()->user()->username) }}">
-        </div>
+    <div class="tabs">
+        <a href="{{ route('profile.index', ['tab' => 'sell']) }}" class="{{ $tab === 'sell' ? 'active-sell' : '' }}">出品した商品</a>
+        <a href="{{ route('profile.index', ['tab' => 'buy']) }}" class="{{ $tab === 'buy' ? 'active-buy' : '' }}">購入した商品</a>
+    </div>
 
-        <div class="profile-form__group">
-            <label for="zipcode">郵便番号</label>
-            <input type="zipcode" id="zipcode" value="{{ old('zipcode', auth()->user()->zipcode) }}">
+    @if($tab === 'sell')
+    <div class="tab-content">
+        <div class="items-grid">
+            @forelse($listedItems as $item)
+            <div class="item-card">
+                <a href="{{ route('item.home', $item->id) }}">
+                    @if($item->image && Storage::exists('public/' . $item->image))
+                    <img src="{{ asset('storage/' . $item->image) }}" alt="{{ e($item->name) }}" class="item-image">
+                    @endif
+                    <p class="item-name">{{ e($item->name) }}</p>
+                </a>
+            </div>
+            @empty
+            <p>出品した商品はありません。</p>
+            @endforelse
         </div>
-
-        <div class="profile-form__group">
-            <label for="address">住所</label>
-            <input type="text" id="address" value="{{ old('address', auth()->user()->address) }}">
+    </div>
+    @elseif($tab === 'buy')
+    <div class="tab-content">
+        <div class="items-grid">
+            @forelse($purchasedItems as $item)
+            <div class="item-card">
+                <a href="{{ route('item.home', $item->id) }}">
+                    @if($item->image && Storage::exists('public/' . $item->image))
+                    <img src="{{ asset('storage/' . $item->image) }}" alt="{{ e($item->name) }}" class="item-image">
+                    @endif
+                    <p class="item-name">{{ e($item->name) }}</p>
+                </a>
+            </div>
+            @empty
+            <p>購入した商品はありません。</p>
+            @endforelse
         </div>
-
-        <div class="profile-form__group">
-            <label for="building"></label>
-            <input type="text" id="building" value="{{ old('building', auth()->user()->building) }}">
-        </div>
-
-        <button type="submit" class="submit-btn">更新する</button>
-    </form>
+    </div>
+    @endif
 </div>
 @endsection

@@ -12,21 +12,21 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
         if (!$user) {
-            return redirect()->route('login')->withErrors(['message' => 'ログインしてください。']);
+            return redirect()->route('login');
         }
 
         $tab = request()->query('tab', 'sell');
         $listedItems = $user->items;
         $purchasedItems = $user->purchases;
 
-        return view('mypage.show', compact('user', 'listedItems', 'purchasedItems', 'tab'));
+        return view('mypage.profile', compact('user', 'listedItems', 'purchasedItems', 'tab'));
     }
 
     public function edit()
     {
         $user = Auth::user();
         if (!$user) {
-            return redirect()->route('login')->withErrors(['message' => 'ログインしてください。']);
+            return redirect()->route('login');
         }
 
         return view('mypage.edit', compact('user'));
@@ -39,7 +39,7 @@ class ProfileController extends Controller
 
         $user = Auth::user();
         if (!$user) {
-            return redirect()->route('login')->withErrors(['message' => 'ログインしてください。']);
+            return redirect()->route('login');
         }
 
         if (isset($profileData['profile_image'])) {
@@ -54,6 +54,6 @@ class ProfileController extends Controller
             'building' => $addressData['building'],
         ]);
 
-        return redirect()->route('profile.index')->with('success', 'プロフィールを更新しました。');
+        return redirect()->route('profile.index');
     }
 }

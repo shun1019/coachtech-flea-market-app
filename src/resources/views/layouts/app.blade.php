@@ -19,14 +19,14 @@
             <input type="text" placeholder="なにをお探しですか？">
         </div>
         <div class="header__nav">
-            <form class="logout-form">
+            <form action="{{ route('logout') }}" method="POST" class="logout-form">
                 @csrf
                 <button type="submit" class="logout-btn">ログアウト</button>
             </form>
             <form action="{{ route('profile.index') }}" method="GET">
                 <button type="submit" class="mypage-btn">マイページ</button>
             </form>
-            <form>
+            <form action="{{ route('sell') }}" method="GET">
                 <button type="submit" class="sell-btn">出品</button>
             </form>
         </div>

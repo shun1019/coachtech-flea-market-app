@@ -22,7 +22,7 @@
 
         <div class="edit-profile__group">
             <label for="username">ユーザー名</label>
-            <input type="text" id="username" name="username" value="{{ $user->name }}">
+            <input type="text" id="username" name="username" value="{{ $user->username }}">
         </div>
 
         <div class="edit-profile__group">

@@ -28,4 +28,12 @@ class LoginRequest extends FormRequest
             'password' => 'required|string|min:6',
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'email.required' => 'メールアドレスを入力してください。',
+            'password.required' => 'パスワードを入力してください。',
+        ];
+    }
 }

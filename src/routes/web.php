@@ -2,28 +2,33 @@
 
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Support\Facades\Route;
 
 // 商品一覧画面（トップ画面）
 Route::get('/', [ItemController::class, 'index'])->name('index');
+
+// マイリスト表示（トップ画面のタブ管理）
 Route::get('/?tab=mylist', [ItemController::class, 'myList'])->name('item.mylist');
 
 // 商品詳細画面
-Route::get('/item/{item_id}', [ItemController::class, 'show'])->name('item.show');
+Route::get('/item/{item_id}', [ItemController::class, 'profile'])->name('item.profile');
 
-// 商品出品画面
+// 商品出品
 Route::get('/sell', [ItemController::class, 'create'])->name('sell');
 Route::post('/sell', [ItemController::class, 'store'])->name('store');
 
 // プロフィール画面
-Route::get('/mypage', [ProfileController::class, 'index'])->name('profile.index');
-Route::get('/mypage/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-Route::post('/mypage/profile', [ProfileController::class, 'update'])->name('profile.update');
+Route::prefix('mypage')->group(function () {
+    Route::get('/', [ProfileController::class, 'index'])->name('profile.index');
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
+});
 
-Route::get('/register', function () {
-    return view('auth.register');
-})->name('register');
+Route::view('/login', 'auth.login')->name('login.form');
+Route::post('/login', [AuthController::class, 'login'])->name('login');
 
-Route::get('/login', function () {
-    return view('auth.login');
-})->name('login');
+Route::view('/register', 'auth.register')->name('register.form');
+Route::post('/register', [AuthController::class, 'register'])->name('register');
+
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
