@@ -42,18 +42,25 @@ class ProfileController extends Controller
             return redirect()->route('login');
         }
 
-        if (isset($profileData['profile_image'])) {
-            $path = $profileRequest->file('profile_image')->store('profile_images', 'public');
-            $user->profile_image = $path;
+        // プロファイルの作成または更新
+        $profile = $user->profile;
+
+        if (!$profile) {
+            $user->profile()->create([
+                'zipcode' => $addressData['zipcode'],
+                'address' => $addressData['address'],
+                'building' => $addressData['building'],
+                'profile_image' => $profileData['profile_image'] ?? null,
+            ]);
+        } else {
+            $profile->update(array_merge($addressData, $profileData));
         }
 
+        // ユーザー名の更新
         $user->update([
-            'name' => $addressData['username'],
-            'zipcode' => $addressData['zipcode'],
-            'address' => $addressData['address'],
-            'building' => $addressData['building'],
+            'username' => $addressData['username'],
         ]);
 
-        return redirect()->route('profile.index');
+        return redirect()->route('profile.index')->with('success', 'プロフィールを更新しました！');
     }
 }

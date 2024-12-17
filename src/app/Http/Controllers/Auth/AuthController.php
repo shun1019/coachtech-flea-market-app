@@ -8,7 +8,6 @@ use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
@@ -17,13 +16,11 @@ class AuthController extends Controller
      */
     public function login(LoginRequest $request)
     {
-        if (!Auth::attempt($request->only('email', 'password'))) {
-            throw ValidationException::withMessages([
-                'email' => ['ログイン情報が登録されていません。'],
-            ]);
+        if (!Auth::attempt($request->validated())) {
+            return back()->withErrors(['email' => 'ログイン情報が間違っています。']);
         }
 
-        return redirect()->route('index')->with('success', 'ログインに成功しました。');
+        return redirect()->route('index');
     }
 
     /**
@@ -43,7 +40,7 @@ class AuthController extends Controller
         // 登録後に自動ログイン
         Auth::login($user);
 
-        return redirect()->route('profile.edit')->with('success', '登録が完了しました！プロフィールを編集してください。');
+        return redirect()->route('profile.edit');
     }
 
     /**
@@ -53,6 +50,6 @@ class AuthController extends Controller
     {
         Auth::logout();
 
-        return redirect()->route('login.form')->with('success', 'ログアウトしました。');
+        return redirect()->route('login.form');
     }
 }

@@ -20,9 +20,11 @@ Route::post('/sell', [ItemController::class, 'store'])->name('store');
 
 // プロフィール画面
 Route::prefix('mypage')->group(function () {
-    Route::get('/', [ProfileController::class, 'index'])->name('profile.index');
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/mypage', [ProfileController::class, 'index'])->name('profile.index');
+    Route::get('/mypage/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::post('/mypage/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/mypage?tab=buy', [ProfileController::class, 'buyList'])->name('profile.buy');
+    Route::get('/mypage?tab=sell', [ProfileController::class, 'sellList'])->name('profile.sell');
 });
 
 Route::view('/login', 'auth.login')->name('login.form');

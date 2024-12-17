@@ -1,0 +1,92 @@
+.profile-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+}
+
+.profile-avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin-left: 200px;
+    object-fit: cover;
+}
+
+.profile-name {
+    font-size: 36px;
+    margin-left: 70px;
+    flex-grow: 1;
+}
+
+.edit-profile-btn {
+    color: #ff6347;
+    border: 1px solid #ff6347;
+    padding: 10px 15px;
+    margin-right: 200px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.tabs {
+    display: flex;
+    border-bottom: 2px solid #ccc;
+    margin-bottom: 20px;
+}
+
+.tabs a {
+    padding: 10px 20px;
+    text-decoration: none;
+    color: #333;
+    font-size: 16px;
+    margin-left: 50px;
+}
+
+.tabs a.active-sell {
+    color: #ff6347;
+    margin-left: 50px;
+    margin-right: -20px;
+}
+
+.tabs a.active-buy {
+    color: #ff6347;
+    margin-left: 30px;
+}
+
+.items-grid {
+    display: grid;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.item-card {
+    margin-left: 30px;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.item-card a {
+    text-decoration: none;
+}
+
+.item-card:hover {
+    transform: translateY(-5px);
+}
+
+.item-image {
+    width: 100%;
+    height: auto;
+}
+
+.item-name {
+    margin-top: 0;
+    color: #333;
+}
