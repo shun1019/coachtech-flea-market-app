@@ -14,7 +14,7 @@ Route::get('/?tab=mylist', [ItemController::class, 'myList'])->name('item.mylist
 // 商品詳細画面
 Route::get('/item/{item_id}', [ItemController::class, 'profile'])->name('item.profile');
 
-// 商品出品
+// 商品出品画面
 Route::get('/sell', [ItemController::class, 'create'])->name('sell');
 Route::post('/sell', [ItemController::class, 'store'])->name('store');
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProfileRequest;
 use App\Http\Requests\AddressRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
@@ -42,25 +43,34 @@ class ProfileController extends Controller
             return redirect()->route('login');
         }
 
-        // プロファイルの作成または更新
-        $profile = $user->profile;
+        $profile = $user->profile ?? $user->profile()->create([
+            'zipcode' => '',
+            'address' => '',
+            'building' => '',
+            'profile_image' => null,
+        ]);
 
-        if (!$profile) {
-            $user->profile()->create([
-                'zipcode' => $addressData['zipcode'],
-                'address' => $addressData['address'],
-                'building' => $addressData['building'],
-                'profile_image' => $profileData['profile_image'] ?? null,
-            ]);
-        } else {
-            $profile->update(array_merge($addressData, $profileData));
+        if ($profileRequest->hasFile('profile_image')) {
+            $path = $profileRequest->file('profile_image')->store('profile_images', 'public');
+
+            if ($profile->profile_image) {
+                Storage::disk('public')->delete($profile->profile_image);
+            }
+
+            $profileData['profile_image'] = $path;
         }
 
-        // ユーザー名の更新
+        $profile->update([
+            'profile_image' => $profileData['profile_image'] ?? $profile->profile_image,
+            'zipcode' => $addressData['zipcode'],
+            'address' => $addressData['address'],
+            'building' => $addressData['building'],
+        ]);
+
         $user->update([
             'username' => $addressData['username'],
         ]);
 
-        return redirect()->route('profile.index')->with('success', 'プロフィールを更新しました！');
+        return redirect()->route('profile.index')->with('success', 'プロフィールが更新されました！');
     }
 }

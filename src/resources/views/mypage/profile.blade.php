@@ -9,8 +9,8 @@
 @section('content')
 <div class="profile-container">
     <div class="profile-header">
-        @if($user->profile_image)
-        <img src="{{ asset('storage/' . $user->profile_image) }}" alt="プロフィール画像" class="profile-avatar">
+        @if($user->profile && $user->profile->profile_image)
+        <img src="{{ Storage::url($user->profile->profile_image) }}" alt="プロフィール画像" class="profile-avatar">
         @endif
         <h2 class="profile-name">{{ e($user->username) }}</h2>
         <a href="{{ route('profile.edit') }}" class="edit-profile-btn">プロフィールを編集</a>
