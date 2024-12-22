@@ -16,8 +16,12 @@ class AuthController extends Controller
      */
     public function login(LoginRequest $request)
     {
-        if (!Auth::attempt($request->validated())) {
-            return back()->withErrors(['email' => 'ログイン情報が間違っています。']);
+        $credentials = $request->validated();
+
+        if (!Auth::attempt($credentials)) {
+            return back()->withErrors([
+                'auth_failed' => 'ログイン情報が登録されていません。',
+            ])->withInput();
         }
 
         return redirect()->route('index');
@@ -30,14 +34,12 @@ class AuthController extends Controller
     {
         $validated = $request->validated();
 
-        // ユーザーを登録
         $user = User::create([
             'username' => $validated['username'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
         ]);
 
-        // 登録後に自動ログイン
         Auth::login($user);
 
         return redirect()->route('profile.edit');

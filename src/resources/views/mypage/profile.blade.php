@@ -26,7 +26,7 @@
         <div class="items-grid">
             @forelse($listedItems as $item)
             <div class="item-card">
-                <a href="{{ route('item.home', $item->id) }}">
+                <a href="{{ route('item.detail', $item->id) }}">
                     @if($item->image && Storage::exists('public/' . $item->image))
                     <img src="{{ asset('storage/' . $item->image) }}" alt="{{ e($item->name) }}" class="item-image">
                     @endif
@@ -43,7 +43,7 @@
         <div class="items-grid">
             @forelse($purchasedItems as $item)
             <div class="item-card">
-                <a href="{{ route('item.home', $item->id) }}">
+                <a href="{{ route('item.detail', $item->id) }}">
                     @if($item->image && Storage::exists('public/' . $item->image))
                     <img src="{{ asset('storage/' . $item->image) }}" alt="{{ e($item->name) }}" class="item-image">
                     @endif

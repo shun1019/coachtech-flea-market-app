@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Item;
 use App\Models\Category;
-use Illuminate\Http\Request;
-
+use App\Http\Requests\ExhibitionRequest;
+use Illuminate\Support\Facades\Auth;
 class ItemController extends Controller
 {
     // 商品一覧の表示
@@ -21,22 +22,24 @@ class ItemController extends Controller
     }
 
     // 商品データの保存
-    public function store(Request $request)
+    public function store(ExhibitionRequest $request)
     {
-        $request->validate([
-            'name' => 'required|max:255',
-            'price' => 'required|numeric|min:0',
-            'description' => 'required|max:255',
-            'category' => 'required|exists:categories,id',
-            'condition' => 'required|max:50',
-            'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-        ], [
-            'name.required' => '商品名は必須です。',
-            'price.required' => '価格は必須です。',
-            'description.required' => '商品の説明は必須です。',
-            'category.required' => 'カテゴリーを選択してください。',
-            'condition.required' => '商品の状態を選択してください。',
-            'image.required' => '商品画像をアップロードしてください。',
+        $path = $request->file('image')->store('items', 'public');
+
+        $item = Item::create([
+            'user_id' => Auth::id(),
+            'name' => $request->name,
+            'description' => $request->description,
+            'price' => $request->price,
+            'category_id' => $request->category_id,
+            'condition' => $request->condition,
+            'image' => $path,
+            'status' => 'available',
+            'like_count' => 0,
+            'comments_count' => 0,
         ]);
+
+        // マイページへリダイレクト
+        return redirect()->route('profile.index');
     }
 }
