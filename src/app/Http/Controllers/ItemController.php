@@ -39,7 +39,13 @@ class ItemController extends Controller
             'comments_count' => 0,
         ]);
 
-        // マイページへリダイレクト
         return redirect()->route('profile.index');
+    }
+
+    // 商品詳細の表示
+    public function show($item_id)
+    {
+        $item = Item::findOrFail($item_id);
+        return view('detail', compact('item'));
     }
 }

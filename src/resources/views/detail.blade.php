@@ -20,7 +20,7 @@
         <div class="item-detail__likes">
             <span>☆</span>
             <span>{{ $item->like_count }}</span>
-            <span>コメント {{ $comments->count() }}</span>
+            <span>コメント {{ $comments->count() ?? 0 }}</span>
         </div>
 
         <!-- 購入手続きへボタン -->
