@@ -1,0 +1,131 @@
+.item-detail {
+    display: flex;
+    gap: 60px;
+    margin-top: 50px;
+    margin-bottom: 100px;
+    padding: 20px;
+}
+
+.item-detail__image {
+    width: 100px;
+    flex: 1;
+    text-align: center;
+}
+
+.item-detail__image img {
+    width: 100%;
+    max-width: 500px;
+    height: 500px;
+    margin-top: 50px;
+    padding-left: 50px;
+    height: auto;
+}
+
+.item-detail__info {
+    padding-left: 80px;
+    flex: 2;
+}
+
+.item-title {
+    font-size: 24px;
+    margin-bottom: 30px;
+}
+
+.brand {
+    color: gray;
+    margin-bottom: 30px;
+}
+
+.price {
+    font-size: 22px;
+    margin-bottom: 15px;
+}
+
+.item-detail__likes {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 20px;
+}
+
+.item-detail__likes span {
+    font-size: 18px;
+}
+
+.btn-purchase {
+    background-color: #FF6347;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    min-width: 600px;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+.btn-purchase:hover {
+    background-color: #FF4500;
+}
+
+.section-title {
+    font-size: 25px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+p {
+    margin-bottom: 30px;
+}
+
+.comment {
+    font-size: 18px;
+}
+
+.comment-user {
+    display: flex;
+    align-items: center;
+    font-size: 23px;
+    gap: 20px;
+}
+
+.comment-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.comment-content {
+    flex: 1;
+    margin-top: 5px;
+}
+
+.textarea-section__title {
+    font-size: 20px;
+    font-weight: bolder;
+    margin-top: 30px;
+}
+
+textarea {
+    min-width: 594px;
+    height: 200px;
+    margin-bottom: 30px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.btn-comment {
+    background-color: #FF6347;
+    color: white;
+    min-width: 600px;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.btn-comment:hover {
+    background-color: #FF4500;
+}

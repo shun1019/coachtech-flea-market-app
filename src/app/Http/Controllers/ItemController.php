@@ -8,20 +8,17 @@ use App\Http\Requests\ExhibitionRequest;
 use Illuminate\Support\Facades\Auth;
 class ItemController extends Controller
 {
-    // 商品一覧の表示
     public function index()
     {
         return view('index');
     }
 
-    // 商品出品フォームの表示
     public function create()
     {
         $categories = Category::all();
         return view('sell', compact('categories'));
     }
 
-    // 商品データの保存
     public function store(ExhibitionRequest $request)
     {
         $path = $request->file('image')->store('items', 'public');
@@ -42,10 +39,12 @@ class ItemController extends Controller
         return redirect()->route('profile.index');
     }
 
-    // 商品詳細の表示
     public function show($item_id)
     {
         $item = Item::findOrFail($item_id);
-        return view('detail', compact('item'));
+        $comments = $item->comments()->with('user')->get();
+        $user = Auth::user();
+
+        return view('detail', compact('item', 'comments', 'user'));
     }
 }
