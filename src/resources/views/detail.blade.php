@@ -18,9 +18,17 @@
         <p class="brand">ブランド名</p>
         <p class="price">¥{{ number_format($item->price) }} <span>(税込)</span></p>
         <div class="item-detail__likes">
-            <span>☆</span>
+            <form action="{{ route('item.like.toggle', $item->id) }}" method="POST">
+                @csrf
+                <button type="submit" class="like-button">
+                    @if($userLiked)
+                    ★
+                    @else
+                    ☆
+                    @endif
+                </button>
+            </form>
             <span>{{ $item->like_count }}</span>
-            <span>コメント {{ $comments->count() ?? 0 }}</span>
         </div>
 
         <a href="{{ route('purchase.show', ['item_id' => $item->id]) }}" class="btn-purchase">購入手続きへ</a>
@@ -37,8 +45,8 @@
             @forelse($comments as $comment)
             <div class="comment">
                 <div class="comment-user">
-                    @if($user && $user->profile && $user->profile->profile_image)
-                    <img src="{{ asset('storage/' . $user->profile->profile_image) }}" alt="ユーザー画像" class="comment-avatar">
+                    @if($comment->user && $comment->user->profile && $comment->user->profile->profile_image)
+                    <img src="{{ asset('storage/' . $comment->user->profile->profile_image) }}" alt="ユーザー画像" class="comment-avatar">
                     @endif
                     <p><strong>{{ $comment->user->name }}</strong></p>
                 </div>

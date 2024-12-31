@@ -31,4 +31,9 @@ class Item extends Model
     {
         return $this->hasMany(Comment::class);
     }
+
+    public function likesByUsers()
+    {
+        return $this->belongsToMany(User::class, 'likes');
+    }
 }

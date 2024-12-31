@@ -8,7 +8,7 @@
 
 @section('content')
 <div class="sell-form">
-    <h1>商品の出品</h1>
+    <h1 class="address-edit__title">商品の出品</h1>
 
     <form action="{{ route('store') }}" method="post" enctype="multipart/form-data">
         @csrf
@@ -18,7 +18,6 @@
             <div class="image-upload-wrapper">
                 <input type="file" id="image" name="image" accept="image/*" class="sell-form__image">
                 <label for="image" class="image-upload-label">画像を選択する</label>
-                <p id="file-name" class="file-name"></p>
             </div>
             @error('image')
             <div class="sell-form-error">{{ $message }}</div>

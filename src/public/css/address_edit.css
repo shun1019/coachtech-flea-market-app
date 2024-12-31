@@ -1,0 +1,63 @@
+.address-edit-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.address-edit__title {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.address-edit__form {
+    margin-bottom: 30px;
+}
+
+.address-edit__form label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    font-size: 20px;
+}
+
+.address-edit__form input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    margin-bottom: 15px;
+}
+
+.form-error {
+    color: #ff0000;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.address-edit__submit-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #ff6347;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+    .address-edit-container {
+        padding: 15px;
+    }
+
+    .address-edit__title {
+        font-size: 20px;
+    }
+
+    .address-edit__submit-btn {
+        font-size: 14px;
+    }
+}

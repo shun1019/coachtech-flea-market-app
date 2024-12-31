@@ -8,16 +8,15 @@
 
 @section('content')
 <div class="edit-profile__container">
-    <h2 class="edit-profile__title">プロフィール設定</h2>
+    <h1 class="edit-profile__title">プロフィール設定</h1>
     <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data" class="edit-profile__form">
         @csrf
         <div class="edit-profile__image-section">
             @if($user->profile && $user->profile->profile_image)
             <img src="{{ Storage::url($user->profile->profile_image) }}" alt="プロフィール画像" class="profile-avatar">
             @endif
-            <label class="edit-profile__image-upload-btn">
-                <input type="file" name="profile_image">
-            </label>
+            <input type="file" name="profile_image">
+            <label for="image" class="image-upload-label">画像を選択する</label>
             @error('profile_image')
             <p class="error">{{ $message }}</p>
             @enderror

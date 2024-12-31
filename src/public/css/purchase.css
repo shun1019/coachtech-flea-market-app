@@ -5,15 +5,14 @@
 }
 
 .purchase-form {
-    flex: 2;
-    padding-right: 20px;
+    padding-right: 80px;
+    width: 600px;
 }
 
 .purchase-item {
     display: flex;
     border-bottom: 1px solid #ccc;
     padding-bottom: 40px;
-    margin-bottom: 20px;
 }
 
 .purchase-item__image {
@@ -61,7 +60,7 @@
 
 .purchase-address a {
     color: #007BFF;
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 .purchase-summary {
@@ -72,6 +71,7 @@
 .summary-box {
     border: 1px solid #ccc;
     margin-bottom: 20px;
+    width: 400px;
 }
 
 .summary-item {
@@ -83,7 +83,7 @@
 }
 
 .btn-purchase {
-    width: 100%;
+    width: 400px;
     background-color: #ff6347;
     color: white;
     padding: 10px;
