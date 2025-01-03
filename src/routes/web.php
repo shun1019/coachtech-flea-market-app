@@ -33,6 +33,7 @@ Route::prefix('mypage')->group(function () {
 
 // 購入関連
 Route::get('/purchase/{item_id}', [PurchaseController::class, 'show'])->name('purchase.show');
+Route::post('/purchase/{item_id}/complete', [PurchaseController::class, 'complete'])->name('purchase.complete');
 Route::get('/purchase/address/{item_id}/edit', [PurchaseController::class, 'editAddress'])->name('purchase.address.edit');
 Route::post('/purchase/address/{item_id}/update', [PurchaseController::class, 'updateAddress'])->name('purchase.address.update');
 

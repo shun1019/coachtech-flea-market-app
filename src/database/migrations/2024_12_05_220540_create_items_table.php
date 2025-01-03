@@ -6,11 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateItemsTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('items', function (Blueprint $table) {
@@ -26,23 +21,18 @@ class CreateItemsTable extends Migration
             $table->unsignedBigInteger('like_count')->default(0);
             $table->unsignedBigInteger('comments_count')->default(0);
             $table->timestamps();
+
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::table('items', function (Blueprint $table) {
-            $table->dropForeign(['user_id']);
-            $table->dropForeign(['category_id']);
+            $table->dropForeign('items_user_id_foreign');
+            $table->dropForeign('items_category_id_foreign');
         });
-
         Schema::dropIfExists('items');
     }
 }

@@ -14,17 +14,21 @@ class ItemController extends Controller
         $tab = request()->query('tab', 'recommended');
         $user = Auth::user();
 
-        if ($tab === 'recommended') {
-            if ($user) {
-                $likedItemIds = session('liked_items', []);
-                $items = Item::whereIn('id', $likedItemIds)->get();
-            } else {
-                $items = collect();
-            }
-        } elseif ($tab === 'mylist') {
-            $items = $user ? $user->items : collect();
+        if (!$user) {
+            $items = collect();
         } else {
-            $items = Item::paginate(8);
+            if ($tab === 'mylist') {
+                $likedItemIds = $user->likes()->pluck('item_id')->toArray();
+                $items = Item::whereIn('id', $likedItemIds)
+                    ->where('user_id', '!=', $user->id)
+                    ->get();
+            } elseif ($tab === 'recommended') {
+                $items = Item::where('user_id', '!=', $user->id)
+                    ->where('status', 'available')
+                    ->get();
+            } else {
+                $items = Item::paginate(8);
+            }
         }
 
         return view('index', compact('items'));
@@ -62,8 +66,7 @@ class ItemController extends Controller
         $comments = $item->comments()->with('user')->get();
         $user = Auth::user();
 
-        $likedItems = session('liked_items', []);
-        $userLiked = in_array($item->id, $likedItems);
+        $userLiked = $user && $user->likes()->where('item_id', $item_id)->exists();
 
         return view('detail', compact('item', 'comments', 'user', 'userLiked'));
     }
@@ -77,17 +80,13 @@ class ItemController extends Controller
             return redirect()->back()->with('error', 'ログインが必要です。');
         }
 
-        $likedItems = session('liked_items', []);
-
-        if (in_array($item->id, $likedItems)) {
+        if ($user->likes()->where('item_id', $item_id)->exists()) {
+            $user->likes()->detach($item_id);
             $item->decrement('like_count');
-            $likedItems = array_diff($likedItems, [$item->id]);
         } else {
+            $user->likes()->attach($item_id);
             $item->increment('like_count');
-            $likedItems[] = $item->id;
         }
-
-        session(['liked_items' => $likedItems]);
 
         return redirect()->back();
     }
