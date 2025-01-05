@@ -8,6 +8,7 @@
 
 @section('content')
 <div class="purchase-container">
+    <!-- 支払い方法選択フォーム -->
     <form action="{{ route('purchase.show', ['item_id' => $item->id]) }}" method="GET" id="payment-method-form">
         <div class="purchase-form">
             <div class="purchase-item">
@@ -32,14 +33,18 @@
         <div class="purchase-form">
             <div class="purchase-address">
                 <h3>配送先</h3>
-                <p>〒 {{ $profile->zipcode ?? '未設定' }}</p>
-                <p>{{ $profile->address ?? '未設定' }}</p>
-                <p>{{ $profile->building ?? '未設定' }}</p>
+                <p>〒 {{ $profile->zipcode }}</p>
+                <p>{{ $profile->address }}</p>
+                <p>{{ $profile->building }}</p>
                 <a href="{{ route('purchase.address.edit', ['item_id' => $item->id]) }}">変更する</a>
             </div>
         </div>
     </form>
+
+    <!-- 購入処理フォーム -->
     <form action="{{ route('purchase.complete', ['item_id' => $item->id]) }}" method="POST">
+        @csrf
+        <input type="hidden" name="payment_method" value="{{ request('payment_method') }}">
         <div class="purchase-summary">
             <div class="summary-box">
                 <div class="summary-item">

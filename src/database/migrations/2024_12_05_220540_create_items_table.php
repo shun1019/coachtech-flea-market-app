@@ -14,7 +14,6 @@ class CreateItemsTable extends Migration
             $table->string('name');
             $table->string('description', 255);
             $table->unsignedInteger('price');
-            $table->unsignedBigInteger('category_id');
             $table->string('condition', 50);
             $table->string('image', 255);
             $table->string('status', 50);
@@ -23,7 +22,6 @@ class CreateItemsTable extends Migration
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
         });
     }
 
@@ -31,7 +29,6 @@ class CreateItemsTable extends Migration
     {
         Schema::table('items', function (Blueprint $table) {
             $table->dropForeign('items_user_id_foreign');
-            $table->dropForeign('items_category_id_foreign');
         });
         Schema::dropIfExists('items');
     }

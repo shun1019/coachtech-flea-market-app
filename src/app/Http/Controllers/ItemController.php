@@ -19,15 +19,17 @@ class ItemController extends Controller
         } else {
             if ($tab === 'mylist') {
                 $likedItemIds = $user->likes()->pluck('item_id')->toArray();
-                $items = Item::whereIn('id', $likedItemIds)
+                $items = Item::with('categories')
+                ->whereIn('id', $likedItemIds)
                     ->where('user_id', '!=', $user->id)
                     ->get();
             } elseif ($tab === 'recommended') {
-                $items = Item::where('user_id', '!=', $user->id)
+                $items = Item::with('categories')
+                ->where('user_id', '!=', $user->id)
                     ->where('status', 'available')
                     ->get();
             } else {
-                $items = Item::paginate(8);
+                $items = Item::with('categories')->paginate(8);
             }
         }
 
@@ -49,7 +51,6 @@ class ItemController extends Controller
             'name' => $request->name,
             'description' => $request->description,
             'price' => $request->price,
-            'category_id' => $request->category_id,
             'condition' => $request->condition,
             'image' => $path,
             'status' => 'available',
@@ -57,12 +58,16 @@ class ItemController extends Controller
             'comments_count' => 0,
         ]);
 
+        if ($request->categories) {
+            $item->categories()->attach($request->categories);
+        }
+
         return redirect()->route('profile.index');
     }
 
     public function show($item_id)
     {
-        $item = Item::findOrFail($item_id);
+        $item = Item::with('categories')->findOrFail($item_id);
         $comments = $item->comments()->with('user')->get();
         $user = Auth::user();
 

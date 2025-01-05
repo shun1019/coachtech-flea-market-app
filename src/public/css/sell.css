@@ -84,7 +84,7 @@
     cursor: pointer;
 }
 
-.sell-category-tags input[type="radio"] {
+.sell-category-tags input[type="checkbox"] {
     display: none;
 }
 
@@ -94,11 +94,15 @@
     padding: 5px 15px;
     border-radius: 20px;
     border: 1px solid #ff6347;
+    background-color: white;
+    color: #ff6347;
+    transition: all 0.3s ease;
 }
 
-.sell-category-tags input[type="radio"]:checked + .category-tag {
+.sell-category-tags input[type="checkbox"]:checked + .category-tag {
     background-color: #ff6347;
     color: white;
+    border-color: #ff6347;
 }
 
 .sell-form-error {

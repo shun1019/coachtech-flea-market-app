@@ -14,12 +14,11 @@ class Item extends Model
         'name',
         'description',
         'price',
-        'category_id',
         'condition',
         'image',
         'status',
         'like_count',
-        'comments_count'
+        'comments_count',
     ];
 
     public function user()
@@ -35,5 +34,15 @@ class Item extends Model
     public function likesByUsers()
     {
         return $this->belongsToMany(User::class, 'likes');
+    }
+
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'category_item');
+    }
+
+    public function purchases()
+    {
+        return $this->hasMany(Purchase::class);
     }
 }

@@ -27,16 +27,17 @@
         <h2>商品の詳細</h2>
 
         <div class="sell-form__group">
-            <label for="category">カテゴリー</label>
+            <label for="categories">カテゴリー</label>
             <div class="sell-category-tags">
                 @foreach ($categories as $category)
-                <label>
-                    <input type="radio" name="category_id" value="{{ $category->id }}" required>
+                <label class="category-label">
+                    <input type="checkbox" name="categories[]" value="{{ $category->id }}"
+                        {{ in_array($category->id, old('categories', [])) ? 'checked' : '' }}>
                     <span class="category-tag">{{ $category->name }}</span>
                 </label>
                 @endforeach
             </div>
-            @error('category_id')
+            @error('categories')
             <div class="sell-form-error">{{ $message }}</div>
             @enderror
         </div>

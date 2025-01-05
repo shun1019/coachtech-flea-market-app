@@ -26,11 +26,6 @@
     flex: 2;
 }
 
-.item-title {
-    font-size: 24px;
-    margin-bottom: 30px;
-}
-
 .brand {
     color: gray;
     margin-bottom: 30px;
@@ -53,30 +48,25 @@
 }
 
 .btn-purchase {
+    display: inline-block;
     background-color: #FF6347;
     color: white;
-    font-size: 20px;
+    font-size: 24px;
     font-weight: bold;
-    min-width: 600px;
     padding: 10px 20px;
+    text-decoration: none;
     border: none;
     cursor: pointer;
     margin-bottom: 20px;
     border-radius: 5px;
-}
-
-.btn-purchase:hover {
-    background-color: #FF4500;
+    min-width: 600px;
+    text-align: center;
 }
 
 .section-title {
     font-size: 25px;
     margin-top: 20px;
     margin-bottom: 10px;
-}
-
-p {
-    margin-bottom: 30px;
 }
 
 .comment {
@@ -119,13 +109,84 @@ textarea {
 .btn-comment {
     background-color: #FF6347;
     color: white;
+    font-size: 20px;
     min-width: 600px;
     padding: 10px 20px;
+    font-weight: bold;
     border: none;
     cursor: pointer;
     border-radius: 5px;
 }
 
-.btn-comment:hover {
-    background-color: #FF4500;
+.icon-container {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.like-button {
+    display: flex;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.like-icon {
+    width: 30px;
+    height: 30px;
+    margin-left: 10px;
+    background-image: url('/storage/image/星アイコン.png');
+    background-size: contain;
+}
+
+.comment-icon {
+    width: 30px;
+    height: 30px;
+    background-image: url('/storage/image/吹き出しアイコン.png');
+    background-size: contain;
+}
+
+.like-count
+{
+    padding-left: 25px;
+    text-align: center;
+    font-size: 18px;
+    color: #555;
+}
+
+.comment-count {
+    padding-left: 7px;
+    text-align: center;
+    font-size: 18px;
+    color: #555;
+}
+
+.category-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.category-tag {
+    display: inline-block;
+    padding: 8px 15px;
+    font-size: 14px;
+    margin-left: 20px;
+    color: #333;
+    background-color: #f1f1f1;
+    border-radius: 20px;
+    font-weight: bold;
+    border: 1px solid #ccc;
+}
+
+.condition {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+}
+
+p {
+    margin-right: 80px;
 }

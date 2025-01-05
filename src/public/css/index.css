@@ -32,10 +32,13 @@
 }
 
 .item-card {
+    position: relative; /* SOLDラベル用 */
     text-align: center;
     border-radius: 10px;
     padding: 10px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #ddd;
+    background-color: #fff;
 }
 
 .item-card:hover {
@@ -65,4 +68,17 @@
     font-size: 16px;
     color: #777;
     margin-top: 5px;
+}
+
+.sold-label {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #ff6347;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 5px;
+    text-transform: uppercase;
 }
