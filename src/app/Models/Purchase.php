@@ -13,12 +13,12 @@ class Purchase extends Model
      * フィールドの一括代入を許可
      */
     protected $fillable = [
-        'item_id',         // 購入された商品のID
-        'buyer_id',        // 購入者のID
-        'purchase_price',  // 購入金額
-        'payment_method',  // 支払い方法（例: カード、コンビニ払い）
-        'address_id',      // 配送先のアドレスID
-        'purchase_status', // 購入の状態（例: pending, completed）
+        'item_id',
+        'buyer_id',
+        'purchase_price',
+        'payment_method',
+        'address_id',
+        'purchase_status',
     ];
 
     /**

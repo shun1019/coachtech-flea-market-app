@@ -2,26 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CommentRequest;
 use App\Models\Comment;
-use App\Models\Item;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
-    public function store(Request $request, $item_id)
+    public function __construct()
     {
-        if (!Auth::check()) {
-            abort(403, 'ログインしてください。');
-        }
+        $this->middleware('auth')->only('store');
+    }
 
-        $request->validate([
-            'content' => 'required|max:255',
-        ], [
-            'content.required' => 'コメント内容を入力してください。',
-            'content.max' => 'コメントは255文字以内で入力してください。',
-        ]);
-
+    public function store(CommentRequest $request, $item_id)
+    {
         Comment::create([
             'item_id' => $item_id,
             'user_id' => Auth::id(),

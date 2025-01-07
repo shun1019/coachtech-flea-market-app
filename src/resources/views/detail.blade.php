@@ -23,7 +23,7 @@
                 <form action="{{ route('item.like.toggle', $item->id) }}" method="POST">
                     @csrf
                     <button type="submit" class="like-button">
-                        <div class="like-icon"></div>
+                        <div class="like-icon {{ $userLiked ? 'liked' : '' }}"></div>
                     </button>
                 </form>
                 <span class="like-count">{{ $item->like_count }}</span>
@@ -72,7 +72,10 @@
         <form action="{{ route('comment.store', $item->id) }}" method="POST">
             @csrf
             <div class="textarea-section__title">商品へのコメント</div>
-            <textarea name="content"></textarea>
+            <textarea name="content">{{ old('content') }}</textarea>
+            @error('content')
+            <div class="comment-error">{{ $message }}</div>
+            @enderror
             <button type="submit" class="btn-comment">コメントを送信する</button>
         </form>
     </div>

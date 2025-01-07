@@ -26,24 +26,30 @@
         <div class="items-grid">
             @forelse($listedItems as $item)
             <div class="item-card">
+                @if($item->status === 'sold')
+                <span class="sold-label">SOLD</span>
+                @endif
                 <a href="{{ route('item.detail', $item->id) }}">
                     @if($item->image && Storage::exists('public/' . $item->image))
                     <img src="{{ asset('storage/' . $item->image) }}" alt="{{ e($item->name) }}" class="item-image">
                     @endif
                     <p class="item-name">{{ e($item->name) }}</p>
-                    @if($item->status === 'sold')
-                    <span class="sold-label">SOLD</span>
-                    @endif
                 </a>
             </div>
             @empty
             <p>出品した商品はありません。</p>
             @endforelse
         </div>
+        <div class="pagination">
+            {{ $listedItems->links() }}
+        </div>
         @elseif($tab === 'buy')
         <div class="items-grid">
             @forelse($purchasedItems as $item)
             <div class="item-card">
+                @if($item->status === 'sold')
+                <span class="sold-label">SOLD</span>
+                @endif
                 <a href="{{ route('item.detail', $item->id) }}">
                     @if($item->image && Storage::exists('public/' . $item->image))
                     <img src="{{ asset('storage/' . $item->image) }}" alt="{{ e($item->name) }}" class="item-image">
@@ -54,6 +60,9 @@
             @empty
             <p>購入した商品はありません。</p>
             @endforelse
+        </div>
+        <div class="pagination">
+            {{ $purchasedItems->links() }}
         </div>
         @endif
     </div>

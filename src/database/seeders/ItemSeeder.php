@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Item;
-use App\Models\Category;
 
 class ItemSeeder extends Seeder
 {
@@ -12,27 +11,99 @@ class ItemSeeder extends Seeder
     {
         $items = [
             [
-                'name' => 'アイテム1',
-                'price' => 1000,
-                'description' => '説明文1',
-                'condition' => '新品',
-                'image' => 'image1.png',
-                'user_id' => 1, // ユーザーIDを指定
+                'name' => '腕時計',
+                'price' => 15000,
+                'description' => 'スタイリッシュなデザインのメンズ腕時計',
+                'image' => 'items/Armani+Mens+Clock.jpg',
+                'condition' => '良好',
+                'status' => 'available',
+                'user_id' => 1,
             ],
             [
-                'name' => 'アイテム2',
-                'price' => 2000,
-                'description' => '説明文2',
-                'condition' => '中古',
-                'image' => 'image2.png',
-                'user_id' => 1, // ユーザーIDを指定
+                'name' => 'HDD',
+                'price' => 5000,
+                'description' => '高速で信頼性の高いハードディスク',
+                'image' => 'items/HDD+Hard+Disk.jpg',
+                'condition' => '目立った傷や汚れなし',
+                'status' => 'available',
+                'user_id' => 1,
+            ],
+            [
+                'name' => '玉ねぎ3束',
+                'price' => 300,
+                'description' => '新鮮な玉ねぎ3束のセット',
+                'image' => 'items/iLoveIMG+d.jpg',
+                'condition' => 'やや傷や汚れあり',
+                'status' => 'available',
+                'user_id' => 1,
+            ],
+            [
+                'name' => '革靴',
+                'price' => 4000,
+                'description' => 'クラシックなデザインの革靴',
+                'image' => 'items/Leather+Shoes+Product+Photo.jpg',
+                'condition' => '状態が悪い',
+                'status' => 'available',
+                'user_id' => 1,
+            ],
+            [
+                'name' => 'ノートPC',
+                'price' => 45000,
+                'description' => '高性能なノートパソコン',
+                'image' => 'items/Living+Room+Laptop.jpg',
+                'condition' => '良好',
+                'status' => 'available',
+                'user_id' => 1,
+            ],
+            [
+                'name' => 'マイク',
+                'price' => 8000,
+                'description' => '高音質のレコーディング用マイク',
+                'image' => 'items/Music+Mic+4632231.jpg',
+                'condition' => '目立った傷や汚れなし',
+                'status' => 'available',
+                'user_id' => 1,
+            ],
+            [
+                'name' => 'ショルダーバッグ',
+                'price' => 3500,
+                'description' => 'おしゃれなショルダーバッグ',
+                'image' => 'items/Purse+fashion+pocket.jpg',
+                'condition' => 'やや傷や汚れあり',
+                'status' => 'available',
+                'user_id' => 1,
+            ],
+            [
+                'name' => 'タンブラー',
+                'price' => 500,
+                'description' => '使いやすいタンブラー',
+                'image' => 'items/Tumbler+souvenir.jpg',
+                'condition' => '状態が悪い',
+                'status' => 'available',
+                'user_id' => 1,
+            ],
+            [
+                'name' => 'コーヒーミル',
+                'price' => 4000,
+                'description' => '手動のコーヒーミル',
+                'image' => 'items/Waitress+with+Coffee+Grinder.jpg',
+                'condition' => '良好',
+                'status' => 'available',
+                'user_id' => 1,
+            ],
+            [
+                'name' => 'メイクセット',
+                'price' => 2500,
+                'description' => '便利なメイクアップセット',
+                'image' => 'items/外出メイクアップセット.jpg',
+                'condition' => '目立った傷や汚れなし',
+                'status' => 'available',
+                'user_id' => 1,
             ],
         ];
 
-        foreach ($items as $itemData) {
-            $item = Item::create($itemData);
-            $categories = Category::inRandomOrder()->take(3)->pluck('id');
-            $item->categories()->attach($categories);
+        foreach ($items as $item) {
+            Item::create($item);
         }
     }
 }

@@ -101,7 +101,6 @@
 textarea {
     min-width: 594px;
     height: 200px;
-    margin-bottom: 30px;
     border-radius: 5px;
     border: 1px solid #ccc;
 }
@@ -113,6 +112,7 @@ textarea {
     min-width: 600px;
     padding: 10px 20px;
     font-weight: bold;
+    margin-top: 30px;
     border: none;
     cursor: pointer;
     border-radius: 5px;
@@ -139,6 +139,10 @@ textarea {
     margin-left: 10px;
     background-image: url('/storage/image/星アイコン.png');
     background-size: contain;
+}
+
+.like-icon.liked {
+    background-image: url('/storage/image/赤い星のアイコン.jpg');
 }
 
 .comment-icon {
@@ -189,4 +193,10 @@ textarea {
 
 p {
     margin-right: 80px;
+}
+
+.comment-error {
+    color: #ff0000;
+    font-size: 18px;
+    margin: 10px;
 }

@@ -15,25 +15,25 @@ class ItemController extends Controller
         $user = Auth::user();
 
         if (!$user) {
-            $items = collect();
+            $items = Item::with('categories')->paginate(8);
         } else {
-            if ($tab === 'mylist') {
-                $likedItemIds = $user->likes()->pluck('item_id')->toArray();
+            if ($tab === 'recommended') {
                 $items = Item::with('categories')
-                ->whereIn('id', $likedItemIds)
                     ->where('user_id', '!=', $user->id)
-                    ->get();
-            } elseif ($tab === 'recommended') {
+                    ->paginate(8)
+                    ->withQueryString();
+            } elseif ($tab === 'mylist') {
+                $likedItemIds = $user->likes()->pluck('item_id');
                 $items = Item::with('categories')
-                ->where('user_id', '!=', $user->id)
-                    ->where('status', 'available')
-                    ->get();
+                    ->whereIn('id', $likedItemIds)
+                    ->paginate(8)
+                    ->withQueryString();
             } else {
                 $items = Item::with('categories')->paginate(8);
             }
         }
 
-        return view('index', compact('items'));
+        return view('index', compact('items', 'tab'));
     }
 
     public function create()
@@ -82,16 +82,12 @@ class ItemController extends Controller
         $user = Auth::user();
 
         if (!$user) {
-            return redirect()->back()->with('error', 'ログインが必要です。');
+            return redirect()->back();
         }
 
-        if ($user->likes()->where('item_id', $item_id)->exists()) {
-            $user->likes()->detach($item_id);
-            $item->decrement('like_count');
-        } else {
-            $user->likes()->attach($item_id);
-            $item->increment('like_count');
-        }
+        $liked = $user->likes()->toggle($item_id);
+        $item->increment('like_count', count($liked['attached']));
+        $item->decrement('like_count', count($liked['detached']));
 
         return redirect()->back();
     }

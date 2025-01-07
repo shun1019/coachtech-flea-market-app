@@ -15,8 +15,8 @@
             @if($user->profile && $user->profile->profile_image)
             <img src="{{ Storage::url($user->profile->profile_image) }}" alt="プロフィール画像" class="profile-avatar">
             @endif
-            <input type="file" name="profile_image">
-            <label for="image" class="image-upload-label">画像を選択する</label>
+            <input type="file" name="profile_image" id="profile_image">
+            <label for="profile_image" class="image-upload-label">画像を選択する</label>
             @error('profile_image')
             <p class="error">{{ $message }}</p>
             @enderror

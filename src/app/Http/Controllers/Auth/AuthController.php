@@ -11,25 +11,25 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    /**
-     * Handle the login process.
-     */
     public function login(LoginRequest $request)
     {
-        $credentials = $request->validated();
+        $credentials = $request->only('email', 'password');
+
+        if (!User::where('email', $credentials['email'])->exists()) {
+            return back()->withErrors([
+                'email' => 'このメールアドレスは登録されていません。',
+            ])->withInput();
+        }
 
         if (!Auth::attempt($credentials)) {
             return back()->withErrors([
-                'auth_failed' => 'ログイン情報が登録されていません。',
+                'password' => 'パスワードが正しくありません。',
             ])->withInput();
         }
 
         return redirect()->route('index');
     }
 
-    /**
-     * Handle the registration process.
-     */
     public function register(RegisterRequest $request)
     {
         $validated = $request->validated();
@@ -45,9 +45,6 @@ class AuthController extends Controller
         return redirect()->route('profile.edit');
     }
 
-    /**
-     * Handle the logout process.
-     */
     public function logout()
     {
         Auth::logout();

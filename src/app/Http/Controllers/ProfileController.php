@@ -17,8 +17,10 @@ class ProfileController extends Controller
         }
 
         $tab = request()->query('tab', 'sell');
-        $listedItems = $user->items;
-        $purchasedItems = $user->purchases;
+
+        $listedItems = $user->items()->paginate(8);
+
+        $purchasedItems = $user->purchases()->paginate(8);
 
         return view('mypage.profile', compact('user', 'listedItems', 'purchasedItems', 'tab'));
     }
@@ -71,6 +73,6 @@ class ProfileController extends Controller
             'username' => $addressData['username'],
         ]);
 
-        return redirect()->route('profile.index')->with('success', 'プロフィールが更新されました！');
+        return redirect()->route('profile.index');
     }
 }
