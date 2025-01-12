@@ -28,7 +28,9 @@ class CreateItemsTable extends Migration
     public function down()
     {
         Schema::table('items', function (Blueprint $table) {
-            $table->dropForeign('items_user_id_foreign');
+            if (Schema::hasColumn('items', 'user_id')) {
+                $table->dropForeign(['user_id']);
+            }
         });
         Schema::dropIfExists('items');
     }

@@ -27,17 +27,27 @@
                     <option value="コンビニ払い" {{ request('payment_method') == 'コンビニ払い' ? 'selected' : '' }}>コンビニ払い</option>
                     <option value="カード払い" {{ request('payment_method') == 'カード払い' ? 'selected' : '' }}>カード払い</option>
                 </select>
+                @error('payment_method')
+                <p class="error">{{ $message }}</p>
+                @enderror
             </div>
         </div>
         @csrf
         <div class="purchase-form">
             <div class="purchase-address">
                 <h3>配送先</h3>
+                @if ($profile)
                 <p>〒 {{ $profile->zipcode }}</p>
                 <p>{{ $profile->address }}</p>
                 <p>{{ $profile->building }}</p>
+                @else
+                <p>配送先が設定されていません。</p>
+                @endif
                 <a href="{{ route('purchase.address.edit', ['item_id' => $item->id]) }}">変更する</a>
             </div>
+            @error('address_id')
+            <p class="error">{{ $message }}</p>
+            @enderror
         </div>
     </form>
 
@@ -45,6 +55,7 @@
     <form action="{{ route('purchase.complete', ['item_id' => $item->id]) }}" method="POST">
         @csrf
         <input type="hidden" name="payment_method" value="{{ request('payment_method') }}">
+        <input type="hidden" name="address_id" value="{{ $profile->id ?? '' }}">
         <div class="purchase-summary">
             <div class="summary-box">
                 <div class="summary-item">

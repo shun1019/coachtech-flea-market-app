@@ -25,6 +25,7 @@ class ItemController extends Controller
             } elseif ($tab === 'mylist') {
                 $likedItemIds = $user->likes()->pluck('item_id');
                 $items = Item::with('categories')
+                    ->where('user_id', '!=', $user->id)
                     ->whereIn('id', $likedItemIds)
                     ->paginate(8)
                     ->withQueryString();
