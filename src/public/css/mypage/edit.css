@@ -15,7 +15,7 @@
     align-items: center;
     justify-content: center;
     gap: 40px;
-    margin: 0 200px 50px 0;
+    margin-bottom: 50px;
 }
 
 .profile-avatar {
@@ -33,6 +33,7 @@
     border-radius: 5px;
     font-size: 14px;
     cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .image-upload-label:hover {
@@ -81,25 +82,15 @@ input[type="file"] {
     background-color: #e55342;
 }
 
-.error {
+.edit-error {
     color: #ff0000;
     font-size: 14px;
     margin-top: 5px;
-    width: 250px;
 }
 
-/* レスポンシブ対応 */
-@media (max-width: 768px) {
+@media (min-width: 768px) and (max-width: 850px) {
     .edit-profile__container {
         padding: 15px;
-    }
-
-    .edit-profile__title {
-        font-size: 20px;
-    }
-
-    .edit-profile__submit-btn {
-        font-size: 14px;
     }
 
     .profile-avatar {
@@ -110,5 +101,51 @@ input[type="file"] {
     .image-upload-label {
         font-size: 12px;
         padding: 10px 15px;
+        margin-right: 150px;
+    }
+
+    .edit-profile__group label {
+        font-size: 18px;
+    }
+
+    .edit-profile__group input[type="text"] {
+        padding: 8px;
+        font-size: 13px;
+    }
+
+    .edit-profile__submit-btn {
+        font-size: 14px;
+        padding: 8px;
+    }
+}
+
+@media (min-width: 1400px) and (max-width: 1540px) {
+    .edit-profile__image-section {
+        gap: 100px;
+    }
+
+    .profile-avatar {
+        width: 170px;
+        height: 170px;
+    }
+
+    .image-upload-label {
+        font-size: 16px;
+        padding: 14px 22px;
+        margin-right: 200px;
+    }
+
+    .edit-profile__group label {
+        font-size: 22px;
+    }
+
+    .edit-profile__group input[type="text"] {
+        font-size: 16px;
+        padding: 12px;
+    }
+
+    .edit-profile__submit-btn {
+        font-size: 18px;
+        padding: 12px;
     }
 }

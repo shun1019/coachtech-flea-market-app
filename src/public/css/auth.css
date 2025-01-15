@@ -25,3 +25,32 @@ body {
     font-size: 14px;
     margin-top: 5px;
 }
+
+@media (min-width: 1400px) and (max-width: 1540px) {
+    .form-container {
+        margin-top: 60px;
+    }
+
+    .auth-header {
+        padding: 20px 15px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 850px) {
+    .auth-header {
+        height: auto;
+    }
+
+    .auth-header__logo img {
+        height: 25px;
+    }
+
+    .form-container {
+        flex-direction: column;
+        margin-top: 20px;
+    }
+
+    .error {
+        font-size: 12px;
+    }
+}

@@ -18,7 +18,7 @@
             <input type="file" name="profile_image" id="profile_image">
             <label for="profile_image" class="image-upload-label">画像を選択する</label>
             @error('profile_image')
-            <p class="error">{{ $message }}</p>
+            <p class="edit-error">{{ $message }}</p>
             @enderror
         </div>
 
@@ -26,7 +26,7 @@
             <label for="username">ユーザー名</label>
             <input type="text" id="username" name="username" value="{{ old('username', $user->username) }}">
             @error('username')
-            <p class="error">{{ $message }}</p>
+            <p class="edit-error">{{ $message }}</p>
             @enderror
         </div>
 
@@ -34,7 +34,7 @@
             <label for="zipcode">郵便番号</label>
             <input type="text" id="zipcode" name="zipcode" value="{{ old('zipcode', $user->profile->zipcode ?? '') }}">
             @error('zipcode')
-            <p class="error">{{ $message }}</p>
+            <p class="edit-error">{{ $message }}</p>
             @enderror
         </div>
 
@@ -42,7 +42,7 @@
             <label for="address">住所</label>
             <input type="text" id="address" name="address" value="{{ old('address', $user->profile->address ?? '') }}">
             @error('address')
-            <p class="error">{{ $message }}</p>
+            <p class="edit-error">{{ $message }}</p>
             @enderror
         </div>
 
@@ -50,7 +50,7 @@
             <label for="building">建物名</label>
             <input type="text" id="building" name="building" value="{{ old('building', $user->profile->building ?? '') }}">
             @error('building')
-            <p class="error">{{ $message }}</p>
+            <p class="edit-error">{{ $message }}</p>
             @enderror
         </div>
 

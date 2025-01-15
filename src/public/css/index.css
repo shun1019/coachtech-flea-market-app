@@ -1,5 +1,4 @@
 .index-container {
-    max-width: 1540px;
     margin-top: 50px;
 }
 
@@ -74,6 +73,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    text-align: center;
     list-style: none;
     padding: 0;
     margin: 20px 0;
@@ -115,4 +115,41 @@
 svg.w-5.h-5 {
     width: 30px;
     height: 30px;
+}
+
+@media (min-width: 1400px) and (max-width: 1540px) {
+    .index-container {
+        max-width: 100%;
+    }
+    .items-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 40px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 850px) {
+
+    .index-tab a {
+        padding: 8px 20px;
+        font-size: 14px;
+    }
+
+    .items-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        margin: 20px;
+    }
+
+    .item-name {
+        font-size: 16px;
+    }
+
+    .pagination .page-link {
+        padding: 8px 12px;
+    }
+
+    svg.w-5.h-5 {
+        width: 20px;
+        height: 20px;
+    }
 }

@@ -1,5 +1,6 @@
 .item-detail {
     display: flex;
+    flex-wrap: wrap;
     gap: 60px;
     margin-top: 50px;
     margin-bottom: 100px;
@@ -7,23 +8,20 @@
 }
 
 .item-detail__image {
-    width: 100px;
     flex: 1;
-    text-align: center;
 }
 
 .item-detail__image img {
-    width: 100%;
-    max-width: 500px;
-    height: 500px;
+    width: 90%;
+    height: auto;
     margin-top: 50px;
     padding-left: 50px;
-    height: auto;
 }
 
 .item-detail__info {
-    padding-left: 80px;
     flex: 2;
+    width: 80%;
+    margin: 30px;
 }
 
 .brand {
@@ -51,7 +49,7 @@
     display: inline-block;
     background-color: #FF6347;
     color: white;
-    font-size: 24px;
+    font-size: 30px;
     font-weight: bold;
     padding: 10px 20px;
     text-decoration: none;
@@ -59,7 +57,8 @@
     cursor: pointer;
     margin-bottom: 20px;
     border-radius: 5px;
-    min-width: 600px;
+    width: 84%;
+    max-width: 780px;
     text-align: center;
 }
 
@@ -99,7 +98,7 @@
 }
 
 textarea {
-    min-width: 594px;
+    width: 90%;
     height: 200px;
     border-radius: 5px;
     border: 1px solid #ccc;
@@ -108,8 +107,8 @@ textarea {
 .btn-comment {
     background-color: #FF6347;
     color: white;
-    font-size: 20px;
-    min-width: 600px;
+    font-size: 30px;
+    width: 90%;
     padding: 10px 20px;
     font-weight: bold;
     margin-top: 30px;
@@ -152,8 +151,7 @@ textarea {
     background-size: contain;
 }
 
-.like-count
-{
+.like-count {
     padding-left: 25px;
     text-align: center;
     font-size: 18px;
@@ -171,13 +169,14 @@ textarea {
     display: flex;
     align-items: center;
     margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .category-tag {
     display: inline-block;
     padding: 8px 15px;
     font-size: 14px;
-    margin-left: 20px;
     color: #333;
     background-color: #f1f1f1;
     border-radius: 20px;
@@ -188,7 +187,8 @@ textarea {
 .condition {
     display: flex;
     align-items: center;
-    gap: 50px;
+    flex-wrap: wrap;
+    gap: 20px;
 }
 
 p {
@@ -199,4 +199,42 @@ p {
     color: #ff0000;
     font-size: 18px;
     margin: 10px;
+}
+
+/* ==============================
+   タブレット (768px - 850px)
+================================= */
+@media (min-width: 768px) and (max-width: 850px) {
+    .item-detail {
+        margin-top: 30px;
+        margin-bottom: 50px;
+    }
+
+    .item-detail__image img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .btn-purchase {
+        font-size: 18px;
+        padding: 10px;
+    }
+
+    .textarea-section__title,
+    .section-title {
+        font-size: 22px;
+    }
+
+    .category-container,
+    .condition {
+        gap: 15px;
+    }
+
+    textarea {
+        height: 150px;
+    }
+
+    .btn-comment {
+        font-size: 18px;
+    }
 }
