@@ -16,7 +16,9 @@
             <img src="{{ asset('storage/image/logo.svg') }}" alt="COACHTECH">
         </a>
         <div class="search-bar">
-            <input type="text" placeholder="なにをお探しですか？">
+            <form action="{{ route('index') }}" method="GET">
+                <input type="text" name="search" placeholder="なにをお探しですか？" value="{{ request('search') }}" class="search-input">
+            </form>
         </div>
         <div class="header__nav">
             <form action="{{ route('logout') }}" method="POST" class="logout-form">

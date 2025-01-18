@@ -9,32 +9,39 @@ use Illuminate\Support\Facades\Auth;
 
 class ItemController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->only(['create', 'store']);
+    }
+
     public function index()
     {
         $tab = request()->query('tab', 'recommended');
+        $search = request()->query('search', '');
         $user = Auth::user();
 
         if (!$user) {
-            $items = Item::with('categories')->paginate(8);
+            $query = Item::with('categories');
         } else {
             if ($tab === 'recommended') {
-                $items = Item::with('categories')
-                    ->where('user_id', '!=', $user->id)
-                    ->paginate(8)
-                    ->withQueryString();
+                $query = Item::with('categories')->where('user_id', '!=', $user->id);
             } elseif ($tab === 'mylist') {
                 $likedItemIds = $user->likes()->pluck('item_id');
-                $items = Item::with('categories')
-                    ->where('user_id', '!=', $user->id)
-                    ->whereIn('id', $likedItemIds)
-                    ->paginate(8)
-                    ->withQueryString();
+                $query = Item::with('categories')
+                ->where('user_id', '!=', $user->id)
+                    ->whereIn('id', $likedItemIds);
             } else {
-                $items = Item::with('categories')->paginate(8);
+                $query = Item::with('categories');
             }
         }
 
-        return view('index', compact('items', 'tab'));
+        if ($search) {
+            $query->where('name', 'LIKE', '%' . $search . '%');
+        }
+
+        $items = $query->paginate(8)->withQueryString();
+
+        return view('index', compact('items', 'tab', 'search'));
     }
 
     public function create()

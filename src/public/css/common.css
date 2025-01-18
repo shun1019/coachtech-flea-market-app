@@ -49,32 +49,29 @@ body {
 }
 
 .search-bar {
-    display: flex;
-    width: 35%;
+    justify-content: center;
+    width: 50%;
+    margin-left: 100px;
 }
 
-.search-bar input {
-    width: 100%;
-    padding: 10px 20px;
+.search-bar input[type="text"] {
+    padding: 8px;
     font-size: 16px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
+    width:85%;
+    margin-left: 20px;
 }
+
 
 /* ==============================
    PC (1400px - 1540px)
 ================================= */
 @media (min-width: 1400px) and (max-width: 1540px) {
-    .header {
-        padding: 10px 15px;
-    }
-
     .header__nav button {
-        font-size: 14px;
+        font-size: 18px;
     }
 
     .search-bar {
-        width: 40%;
+        width: 60%;
     }
 }
 
@@ -107,8 +104,4 @@ body {
         margin: 0 5px 0 20px;
     }
 
-    .search-bar input {
-        padding: 8px 15px;
-        font-size: 14px;
-    }
 }

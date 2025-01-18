@@ -9,14 +9,12 @@
 @section('content')
 <div class="index-container">
     <div class="index-tab">
-        <a href="{{ auth()->check() ? route('index', ['tab' => 'recommended']) : '#' }}"
-            class="tab-link {{ request()->query('tab', 'recommended') === 'recommended' ? 'active' : '' }}"
-            {{ auth()->check() ? '' : 'onclick="return false;"' }}>
+        <a href="{{ route('index', ['tab' => 'recommended', 'search' => request('search')]) }}"
+            class="tab-link {{ request()->query('tab', 'recommended') === 'recommended' ? 'active' : '' }}">
             おすすめ
         </a>
-        <a href="{{ auth()->check() ? route('index', ['tab' => 'mylist']) : '#' }}"
-            class="tab-link {{ request()->query('tab') === 'mylist' ? 'active' : '' }}"
-            {{ auth()->check() ? '' : 'onclick="return false;"' }}>
+        <a href="{{ route('index', ['tab' => 'mylist', 'search' => request('search')]) }}"
+            class="tab-link {{ request()->query('tab') === 'mylist' ? 'active' : '' }}">
             マイリスト
         </a>
     </div>
@@ -41,7 +39,7 @@
     </div>
 
     <div class="pagination">
-        {{ $items->links() }}
+        {{ $items->appends(['search' => request('search'), 'tab' => request('tab')])->links() }}
     </div>
 </div>
 @endsection
