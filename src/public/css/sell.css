@@ -38,10 +38,7 @@
 }
 
 .image-upload-label {
-    font-size: 15px;
     padding: 10px 20px;
-    font-weight: bold;
-    color: white;
     border-radius: 10px;
     cursor: pointer;
     border: 1px solid #ff6347;
@@ -122,3 +119,4 @@
     cursor: pointer;
     border: none;
 }
+

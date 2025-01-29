@@ -21,7 +21,7 @@ class LoginRequest extends FormRequest
                 'email',
                 function ($attribute, $value, $fail) {
                     if (!User::where('email', $value)->exists()) {
-                        $fail('このメールアドレスは登録されていません。');
+                        $fail('ログイン情報が登録されていません');
                     }
                 },
             ],

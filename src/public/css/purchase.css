@@ -70,6 +70,7 @@
 .purchase-summary {
     padding: 30px;
     min-width: 300px;
+    margin-right: 50px;
 }
 
 .summary-box {
@@ -78,6 +79,7 @@
     width: 100%;
     max-width: 400px;
 }
+
 
 .summary-item {
     padding: 10px;

@@ -13,12 +13,21 @@ class AddressRequest extends FormRequest
 
     public function rules(): array
     {
-        return [
-            'username' => 'required|string',
-            'zipcode' => 'required|regex:/^\d{3}-\d{4}$/',
-            'address' => 'required|string',
-            'building' => 'required|string',
+        $routeName = $this->route()->getName();
+
+        $rules = [
+            'zipcode' => ['required', 'regex:/^\d{3}-\d{4}$/'],
+            'address' => ['required', 'string'],
+            'building' => ['required', 'string',],
         ];
+
+        if ($routeName === 'profile.update') {
+            $rules['username'] = ['required', 'string'];
+        } elseif ($routeName === 'purchase.address.update') {
+            unset($rules['username']);
+        }
+
+        return $rules;
     }
 
     public function messages(): array

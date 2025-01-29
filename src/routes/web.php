@@ -2,18 +2,20 @@
 
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PurchaseController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\StripeWebhookController;
 
-// ホーム画面と商品関連
+// 商品一覧・詳細
 Route::get('/', [ItemController::class, 'index'])->name('index');
 Route::get('/item/{item_id}', [ItemController::class, 'show'])->name('item.detail');
 
-// 商品出品関連
-Route::get('/sell', [ItemController::class, 'create'])->name('sell');
-Route::post('/sell', [ItemController::class, 'store'])->name('store');
+// 出品機能（認証必須）
+Route::middleware('auth')->group(function () {
+    Route::get('/sell', [ItemController::class, 'create'])->name('sell');
+    Route::post('/sell', [ItemController::class, 'store'])->name('store');
+});
 
 // コメント機能
 Route::post('/item/{item_id}/comment', [CommentController::class, 'store'])->name('comment.store');
@@ -21,25 +23,30 @@ Route::post('/item/{item_id}/comment', [CommentController::class, 'store'])->nam
 // いいね機能
 Route::post('/item/{item_id}/like', [ItemController::class, 'toggleLike'])->name('item.like.toggle');
 
-// マイページ関連
-Route::prefix('mypage')->group(function () {
+// マイページ
+Route::middleware('auth')->prefix('mypage')->group(function () {
     Route::get('/', [ProfileController::class, 'index'])->name('profile.index');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
-    Route::get('/purchases', [PurchaseController::class, 'list'])->name('profile.purchases');
 });
 
-// 購入関連
+// 購入機能
 Route::middleware('auth')->group(function () {
     Route::get('/purchase/{item_id}', [PurchaseController::class, 'show'])->name('purchase.show');
-    Route::post('/purchase/{item_id}/complete', [PurchaseController::class, 'complete'])->name('purchase.complete');
+
+    // Stripe Checkout セッション作成用ルート
+    Route::match(['get', 'post'], '/purchase/{item_id}/checkout', [PurchaseController::class, 'checkout'])->name('purchase.checkout');
+
     Route::get('/purchase/{item_id}/address/edit', [PurchaseController::class, 'editAddress'])->name('purchase.address.edit');
     Route::post('/purchase/{item_id}/address/update', [PurchaseController::class, 'updateAddress'])->name('purchase.address.update');
+
+    // Stripe Checkout 成功時とキャンセル時のルート
+    Route::get('/purchase/{item_id}/success', [PurchaseController::class, 'success'])->name('purchase.success');
+    Route::get('/purchase/{item_id}/cancel', [PurchaseController::class, 'cancel'])->name('purchase.cancel');
 });
 
-// 認証関連
-Route::view('/login', 'auth.login')->name('login.form');
-Route::post('/login', [AuthController::class, 'login'])->name('login');
-Route::view('/register', 'auth.register')->name('register.form');
-Route::post('/register', [AuthController::class, 'register'])->name('register');
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+// Stripe Webhook
+Route::post('/stripe/webhook', [StripeWebhookController::class, 'handleWebhook']);
+
+// Fortify による認証機能
+require __DIR__ . '/auth.php';

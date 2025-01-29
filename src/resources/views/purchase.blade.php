@@ -19,12 +19,13 @@
                     <p class="price">¥{{ number_format($item->price) }}</p>
                 </div>
             </div>
+
             <div class="purchase-payment">
                 <h3>支払い方法</h3>
                 <select name="payment_method" onchange="document.getElementById('payment-method-form').submit();" required>
                     <option value="" hidden>選択してください</option>
-                    <option value="コンビニ払い" {{ request('payment_method') == 'コンビニ払い' ? 'selected' : '' }}>コンビニ払い</option>
                     <option value="カード払い" {{ request('payment_method') == 'カード払い' ? 'selected' : '' }}>カード払い</option>
+                    <option value="コンビニ払い" {{ request('payment_method') == 'コンビニ払い' ? 'selected' : '' }}>コンビニ払い</option>
                 </select>
                 @error('payment_method')
                 <p class="purchase-error">{{ $message }}</p>
@@ -47,10 +48,11 @@
     </form>
 
     <!-- 購入処理フォーム -->
-    <form action="{{ route('purchase.complete', ['item_id' => $item->id]) }}" method="POST">
+    <form action="{{ route('purchase.checkout', ['item_id' => $item->id]) }}" method="POST" id="payment-form">
         @csrf
         <input type="hidden" name="payment_method" value="{{ request('payment_method') }}">
         <input type="hidden" name="address_id" value="{{ $profile->id ?? '' }}">
+
         <div class="purchase-summary">
             <div class="summary-box">
                 <div class="summary-item">

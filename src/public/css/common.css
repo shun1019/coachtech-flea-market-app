@@ -54,13 +54,37 @@ body {
     margin-left: 100px;
 }
 
-.search-bar input[type="text"] {
-    padding: 8px;
-    font-size: 16px;
-    width:85%;
-    margin-left: 20px;
+.search-form {
+    display: flex;
+    align-items: center;
 }
 
+.search-input {
+    padding: 8px 10px;
+    font-size: 16px;
+    width: 70%;
+    border: 1px solid #ccc;
+    border-radius: 4px 0 0 4px;
+    outline: none;
+}
+
+.search-icon-btn {
+    display: flex;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 0 4px 4px 0;
+    padding: 7px 10px;
+    cursor: pointer;
+}
+
+.search-icon-btn:hover {
+    background-color: #f0f0f0;
+}
+
+.search-icon {
+    width: 20px;
+    height: 20px;
+}
 
 /* ==============================
    PC (1400px - 1540px)
@@ -75,6 +99,9 @@ body {
     }
 }
 
+/* ==============================
+   タブレット (768px - 850px)
+================================= */
 @media (min-width: 768px) and (max-width: 850px) {
     .header {
         width: 100%;
@@ -89,8 +116,8 @@ body {
     }
 
     .header__nav button {
-        width: 100%;
-        margin-left: 20px;
+        width: 90%;
+        margin-left: 15px;
         font-size: 14px;
     }
 
@@ -104,4 +131,13 @@ body {
         margin: 0 5px 0 20px;
     }
 
+    .search-input {
+        margin-left: 10px;
+        font-size: 14px;
+    }
+
+    .search-icon {
+        width: 18px;
+        height: 18px;
+    }
 }
