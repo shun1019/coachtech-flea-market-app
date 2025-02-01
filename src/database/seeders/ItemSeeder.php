@@ -4,11 +4,18 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Item;
+use App\Models\User;
 
 class ItemSeeder extends Seeder
 {
     public function run()
     {
+        $users = User::all();
+
+        if ($users->isEmpty()) {
+            return;
+        }
+
         $items = [
             [
                 'name' => '腕時計',
@@ -17,7 +24,6 @@ class ItemSeeder extends Seeder
                 'image' => 'items/Armani+Mens+Clock.jpg',
                 'condition' => '良好',
                 'status' => 'available',
-                'user_id' => 1,
             ],
             [
                 'name' => 'HDD',
@@ -26,7 +32,6 @@ class ItemSeeder extends Seeder
                 'image' => 'items/HDD+Hard+Disk.jpg',
                 'condition' => '目立った傷や汚れなし',
                 'status' => 'available',
-                'user_id' => 1,
             ],
             [
                 'name' => '玉ねぎ3束',
@@ -35,7 +40,6 @@ class ItemSeeder extends Seeder
                 'image' => 'items/iLoveIMG+d.jpg',
                 'condition' => 'やや傷や汚れあり',
                 'status' => 'available',
-                'user_id' => 1,
             ],
             [
                 'name' => '革靴',
@@ -44,7 +48,6 @@ class ItemSeeder extends Seeder
                 'image' => 'items/Leather+Shoes+Product+Photo.jpg',
                 'condition' => '状態が悪い',
                 'status' => 'available',
-                'user_id' => 1,
             ],
             [
                 'name' => 'ノートPC',
@@ -53,7 +56,6 @@ class ItemSeeder extends Seeder
                 'image' => 'items/Living+Room+Laptop.jpg',
                 'condition' => '良好',
                 'status' => 'available',
-                'user_id' => 1,
             ],
             [
                 'name' => 'マイク',
@@ -62,7 +64,6 @@ class ItemSeeder extends Seeder
                 'image' => 'items/Music+Mic+4632231.jpg',
                 'condition' => '目立った傷や汚れなし',
                 'status' => 'available',
-                'user_id' => 1,
             ],
             [
                 'name' => 'ショルダーバッグ',
@@ -71,7 +72,6 @@ class ItemSeeder extends Seeder
                 'image' => 'items/Purse+fashion+pocket.jpg',
                 'condition' => 'やや傷や汚れあり',
                 'status' => 'available',
-                'user_id' => 1,
             ],
             [
                 'name' => 'タンブラー',
@@ -80,7 +80,6 @@ class ItemSeeder extends Seeder
                 'image' => 'items/Tumbler+souvenir.jpg',
                 'condition' => '状態が悪い',
                 'status' => 'available',
-                'user_id' => 1,
             ],
             [
                 'name' => 'コーヒーミル',
@@ -89,7 +88,6 @@ class ItemSeeder extends Seeder
                 'image' => 'items/Waitress+with+Coffee+Grinder.jpg',
                 'condition' => '良好',
                 'status' => 'available',
-                'user_id' => 1,
             ],
             [
                 'name' => 'メイクセット',
@@ -98,11 +96,11 @@ class ItemSeeder extends Seeder
                 'image' => 'items/外出メイクアップセット.jpg',
                 'condition' => '目立った傷や汚れなし',
                 'status' => 'available',
-                'user_id' => 1,
             ],
         ];
 
         foreach ($items as $item) {
+            $item['user_id'] = $users->random()->id;
             Item::create($item);
         }
     }

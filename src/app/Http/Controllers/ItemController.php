@@ -21,6 +21,9 @@ class ItemController extends Controller
         $user = Auth::user();
 
         if (!$user) {
+            if ($tab === 'mylist') {
+                return view('index', ['items' => collect(), 'tab' => $tab, 'search' => $search]);
+            }
             $query = Item::with('categories');
         } else {
             if ($tab === 'recommended') {
@@ -30,6 +33,13 @@ class ItemController extends Controller
                 $query = Item::with('categories')
                 ->where('user_id', '!=', $user->id)
                     ->whereIn('id', $likedItemIds);
+            } elseif ($tab === 'purchased') {
+                $purchasedItemIds = $user->purchases()->pluck('item_id');
+                $query = Item::with('categories')
+                ->whereIn('id', $purchasedItemIds);
+            } elseif ($tab === 'exhibited') {
+                $query = Item::with('categories')
+                ->where('user_id', $user->id);
             } else {
                 $query = Item::with('categories');
             }
@@ -39,7 +49,10 @@ class ItemController extends Controller
             $query->where('name', 'LIKE', '%' . $search . '%');
         }
 
-        $items = $query->paginate(8)->withQueryString();
+        $items = $query->select('items.*')->distinct()->paginate(8)->appends([
+            'tab' => $tab,
+            'search' => $search
+        ]);
 
         return view('index', compact('items', 'tab', 'search'));
     }

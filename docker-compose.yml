@@ -16,7 +16,7 @@ services:
     volumes:
       - ./src:/var/www/
     environment:
-      - APP_URL=http://localhost
+      - APP_URL=http://host.docker.internal:8000
     extra_hosts:
       - "host.docker.internal:host-gateway"
 

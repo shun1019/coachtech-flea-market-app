@@ -5,15 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Item;
 use App\Models\Purchase;
+use App\Http\Requests\PurchaseRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Stripe\Checkout\Session as StripeSession;
 use Stripe\Stripe;
-use Stripe\PaymentIntent;
 
 class PurchaseController extends Controller
 {
-    // 購入手続き画面を表示
     public function show($item_id)
     {
         $user = Auth::user();
@@ -27,8 +26,7 @@ class PurchaseController extends Controller
         return view('purchase', compact('item', 'profile'));
     }
 
-    // Stripe Checkout セッション作成
-    public function checkout(Request $request, $item_id)
+    public function checkout(PurchaseRequest $request, $item_id)
     {
         $user = Auth::user();
         $item = Item::findOrFail($item_id);
@@ -43,15 +41,12 @@ class PurchaseController extends Controller
             $paymentMethod = $request->input('payment_method');
 
             if ($paymentMethod === 'カード払い') {
-                // クレジットカード決済
                 $session = StripeSession::create([
                     'payment_method_types' => ['card'],
                     'line_items' => [[
                         'price_data' => [
                             'currency' => 'jpy',
-                            'product_data' => [
-                                'name' => $item->name,
-                            ],
+                            'product_data' => ['name' => $item->name],
                             'unit_amount' => $item->price,
                         ],
                         'quantity' => 1,
@@ -62,17 +57,14 @@ class PurchaseController extends Controller
                 ]);
 
                 return redirect($session->url);
-            } elseif
-            ($paymentMethod === 'カード払い') {
-                // クレジットカード決済
+            } elseif ($paymentMethod === 'コンビニ払い'
+            ) {
                 $session = StripeSession::create([
                     'payment_method_types' => ['konbini'],
                     'line_items' => [[
                         'price_data' => [
                             'currency' => 'jpy',
-                            'product_data' => [
-                                'name' => $item->name,
-                            ],
+                            'product_data' => ['name' => $item->name],
                             'unit_amount' => $item->price,
                         ],
                         'quantity' => 1,
@@ -83,14 +75,15 @@ class PurchaseController extends Controller
                 ]);
 
                 return redirect($session->url);
+            } else {
+                return back()->withErrors(['payment_method' => '無効な支払い方法が選択されました。']);
             }
         } catch (\Exception $e) {
             Log::error('決済エラー: ' . $e->getMessage());
-            return back()->with('error', '決済の処理に失敗しました: ' . $e->getMessage());
+            return back()->withErrors(['error' => '決済の処理に失敗しました: ' . $e->getMessage()]);
         }
     }
 
-    // 購入成功画面
     public function success($item_id)
     {
         $user = Auth::user();
@@ -109,6 +102,39 @@ class PurchaseController extends Controller
 
         return redirect()->route('profile.index')->with('success', '購入が完了しました！');
     }
+
+    public function editAddress($item_id)
+    {
+        $user = Auth::user();
+        $item = Item::findOrFail($item_id);
+
+        if (!$this->validatePurchase($item, $user)) {
+            return redirect()->route('item.detail', $item_id);
+        }
+
+        $profile = $user->profile;
+        return view('address_edit', compact('item_id', 'profile'));
+    }
+
+    public function updateAddress(Request $request, $item_id)
+    {
+        $user = Auth::user();
+
+        $request->validate([
+            'zipcode' => ['required', 'regex:/^\d{3}-\d{4}$/'],
+            'address' => ['required', 'string'],
+            'building' => ['required', 'string',],
+        ], [
+            'zipcode.required' => '郵便番号を入力してください。',
+            'zipcode.regex' => '郵便番号は「XXX-XXXX」の形式で入力してください。',
+            'address.required' => '住所を入力してください。',
+            'building.required' => '建物名を入力してください。',
+        ]);
+        $user->profile->update($request->only(['zipcode', 'address', 'building']));
+
+        return redirect()->route('purchase.show', ['item_id' => $item_id]);
+    }
+
 
     public function cancel($item_id)
     {

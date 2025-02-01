@@ -38,7 +38,6 @@ class FortifyServiceProvider extends ServiceProvider
 
             if ($user && \Hash::check($request->password, $user->password)) {
                 if (!$user->hasVerifiedEmail()) {
-                    // 認証メールの再送信
                     $user->sendEmailVerificationNotification();
 
                     throw ValidationException::withMessages([
@@ -48,7 +47,7 @@ class FortifyServiceProvider extends ServiceProvider
                 return $user;
             }
 
-            return null; // 認証失敗時
+            return null;
         });
     }
 }

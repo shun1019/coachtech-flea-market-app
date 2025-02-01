@@ -16,6 +16,7 @@
         <a href="{{ route('profile.edit') }}" class="edit-profile-btn">プロフィールを編集</a>
     </div>
 
+    {{-- タブの切り替え --}}
     <div class="tabs">
         <a href="{{ route('profile.index', ['tab' => 'sell']) }}" class="{{ $tab === 'sell' ? 'active' : '' }}">出品した商品</a>
         <a href="{{ route('profile.index', ['tab' => 'buy']) }}" class="{{ $tab === 'buy' ? 'active' : '' }}">購入した商品</a>
@@ -41,7 +42,7 @@
             @endforelse
         </div>
         <div class="pagination">
-            {{ $listedItems->links() }}
+            {{ $listedItems->appends(['tab' => 'sell'])->links() }}
         </div>
         @elseif($tab === 'buy')
         <div class="items-grid">
@@ -62,7 +63,7 @@
             @endforelse
         </div>
         <div class="pagination">
-            {{ $purchasedItems->links() }}
+            {{ $purchasedItems->appends(['tab' => 'buy'])->links() }}
         </div>
         @endif
     </div>

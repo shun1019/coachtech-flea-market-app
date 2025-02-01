@@ -10,17 +10,19 @@ class StripeWebhookController extends Controller
 {
     public function handleWebhook(Request $request)
     {
+        Log::info('Stripe Webhook Received!');
         $payload = $request->all();
-        Log::info('Stripe Webhook Received:', $payload);
+        Log::info('Webhook Payload:', $payload);
 
-        if ($payload['type'] === 'payment_intent.succeeded') {
-            // Stripeからの支払い成功通知を処理
-            $paymentIntent = $payload['data']['object'];
+        if ($payload['type'] === 'payment_intent.succeeded' || $payload['type'] === 'charge.succeeded') {
+            $paymentObject = $payload['data']['object'];
+            $purchase = Purchase::where('stripe_payment_id', $paymentObject['id'])->first();
 
-            // 購入データを更新
-            $purchase = Purchase::where('stripe_payment_id', $paymentIntent['id'])->first();
             if ($purchase) {
                 $purchase->update(['purchase_status' => 'completed']);
+                Log::info("Purchase status updated to completed for ID: {$purchase->id}");
+            } else {
+                Log::warning("Purchase not found for Stripe Payment ID: {$paymentObject['id']}");
             }
         }
 

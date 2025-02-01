@@ -22,7 +22,7 @@
 
             <div class="purchase-payment">
                 <h3>支払い方法</h3>
-                <select name="payment_method" onchange="document.getElementById('payment-method-form').submit();" required>
+                <select name="payment_method" onchange="document.getElementById('payment-method-form').submit();">
                     <option value="" hidden>選択してください</option>
                     <option value="カード払い" {{ request('payment_method') == 'カード払い' ? 'selected' : '' }}>カード払い</option>
                     <option value="コンビニ払い" {{ request('payment_method') == 'コンビニ払い' ? 'selected' : '' }}>コンビニ払い</option>
@@ -41,9 +41,6 @@
                 <p>{{ $profile->building }}</p>
                 <a href="{{ route('purchase.address.edit', ['item_id' => $item->id]) }}">変更する</a>
             </div>
-            @error('address_id')
-            <p class="purchase-error">{{ $message }}</p>
-            @enderror
         </div>
     </form>
 

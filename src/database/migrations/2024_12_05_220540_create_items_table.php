@@ -15,10 +15,10 @@ class CreateItemsTable extends Migration
             $table->string('description', 255);
             $table->unsignedInteger('price');
             $table->string('condition', 50);
-            $table->string('image', 255);
-            $table->string('status', 50);
-            $table->unsignedBigInteger('like_count')->default(0);
-            $table->unsignedBigInteger('comments_count')->default(0);
+            $table->string('image', 255)->nullable();
+            $table->string('status', 50)->default('available');
+            $table->unsignedInteger('like_count')->default(0);
+            $table->unsignedInteger('comments_count')->default(0);
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

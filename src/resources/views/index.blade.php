@@ -34,7 +34,7 @@
             </a>
         </div>
         @empty
-        <p>{{ auth()->check() && request()->query('tab', 'recommended') === 'recommended' ? 'おすすめの商品はありません。' : '表示する商品がありません。' }}</p>
+        <p>{{ auth()->check() && request()->query('tab', 'recommended') === 'recommended' ? 'おすすめの商品はありません。' : 'いいねした商品がありません。' }}</p>
         @endforelse
     </div>
 
