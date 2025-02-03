@@ -16,7 +16,6 @@
         <a href="{{ route('profile.edit') }}" class="edit-profile-btn">プロフィールを編集</a>
     </div>
 
-    {{-- タブの切り替え --}}
     <div class="tabs">
         <a href="{{ route('profile.index', ['tab' => 'sell']) }}" class="{{ $tab === 'sell' ? 'active' : '' }}">出品した商品</a>
         <a href="{{ route('profile.index', ['tab' => 'buy']) }}" class="{{ $tab === 'buy' ? 'active' : '' }}">購入した商品</a>

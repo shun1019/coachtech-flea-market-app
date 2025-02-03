@@ -13,10 +13,13 @@
             class="tab-link {{ request()->query('tab', 'recommended') === 'recommended' ? 'active' : '' }}">
             おすすめ
         </a>
+
+        @if(auth()->check())
         <a href="{{ route('index', ['tab' => 'mylist', 'search' => request('search')]) }}"
             class="tab-link {{ request()->query('tab') === 'mylist' ? 'active' : '' }}">
             マイリスト
         </a>
+        @endif
     </div>
 
     <div class="items-grid">
@@ -34,12 +37,16 @@
             </a>
         </div>
         @empty
-        <p>{{ auth()->check() && request()->query('tab', 'recommended') === 'recommended' ? 'おすすめの商品はありません。' : 'いいねした商品がありません。' }}</p>
+        @if(auth()->check() || request()->query('tab', 'recommended') === 'recommended')
+        <p>{{ request()->query('tab', 'recommended') === 'recommended' ? 'おすすめの商品はありません。' : 'いいねした商品がありません。' }}</p>
+        @endif
         @endforelse
     </div>
 
+    @if(method_exists($items, 'appends'))
     <div class="pagination">
         {{ $items->appends(['search' => request('search'), 'tab' => request('tab')])->links() }}
     </div>
+    @endif
 </div>
 @endsection

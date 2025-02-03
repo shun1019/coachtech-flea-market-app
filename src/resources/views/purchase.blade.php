@@ -44,7 +44,6 @@
         </div>
     </form>
 
-    <!-- 購入処理フォーム -->
     <form action="{{ route('purchase.checkout', ['item_id' => $item->id]) }}" method="POST" id="payment-form">
         @csrf
         <input type="hidden" name="payment_method" value="{{ request('payment_method') }}">
