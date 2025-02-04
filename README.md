@@ -122,6 +122,16 @@ coachtech-flea-market-app
    php artisan view:clear
    ```
 
+9.	ストレージへのシンボリックリンクを作成
+   ```bash
+   php artisan storage:link
+   ```
+
+10. テストの実行
+   ```bash
+   php artisan test
+   ```
+
 ---
 
 ### **決済機能（Stripe 導入）**
