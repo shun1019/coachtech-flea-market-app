@@ -19,6 +19,7 @@ class Purchase extends Model
         'payment_method',
         'address_id',
         'purchase_status',
+        'trade_id',
     ];
 
     /**
@@ -50,5 +51,13 @@ class Purchase extends Model
     public function address()
     {
         return $this->belongsTo(UserProfile::class, 'address_id');
+    }
+
+    /**
+     * 取引とのリレーション (追加)
+     */
+    public function trade()
+    {
+        return $this->belongsTo(Trade::class);
     }
 }

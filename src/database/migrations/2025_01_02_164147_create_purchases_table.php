@@ -15,6 +15,7 @@ class CreatePurchasesTable extends Migration
             $table->unsignedInteger('purchase_price');
             $table->string('payment_method', 50);
             $table->unsignedBigInteger('address_id');
+            $table->unsignedBigInteger('trade_id')->nullable();
             $table->string('purchase_status', 50)->default('pending');
             $table->timestamps();
 
@@ -26,12 +27,6 @@ class CreatePurchasesTable extends Migration
 
     public function down()
     {
-        Schema::table('purchases', function (Blueprint $table) {
-            $table->dropForeign(['item_id']);
-            $table->dropForeign(['buyer_id']);
-            $table->dropForeign(['address_id']);
-        });
-
         Schema::dropIfExists('purchases');
     }
 }

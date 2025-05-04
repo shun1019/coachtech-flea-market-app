@@ -4,8 +4,9 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\ChatController;
+use App\Http\Controllers\TradeController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\StripeWebhookController;
 
 // 商品一覧・詳細（未認証でも閲覧可能）
 Route::get('/', [ItemController::class, 'index'])->name('index');
@@ -15,6 +16,14 @@ Route::get('/item/{item_id}', [ItemController::class, 'show'])->name('item.detai
 Route::middleware('auth')->group(function () {
     Route::get('/sell', [ItemController::class, 'create'])->name('sell');
     Route::post('/sell', [ItemController::class, 'store'])->name('store');
+
+    // 取引完了処理のためのルート
+    Route::post('/trade/{trade}/complete', [TradeController::class, 'complete'])->name('trade.complete');
+
+    // チャット送信・編集・削除ルート
+    Route::post('/trade/{trade}/chat', [ChatController::class, 'store'])->name('chat.store');
+    Route::put('/chat/{message}', [ChatController::class, 'update'])->name('chat.update');
+    Route::delete('/chat/{message}', [ChatController::class, 'destroy'])->name('chat.destroy');
 });
 
 // コメント機能
@@ -36,11 +45,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/purchase/{item_id}', [PurchaseController::class, 'checkout'])->name('purchase.checkout');
     Route::get('/purchase/{item_id}/address/edit', [PurchaseController::class, 'editAddress'])->name('purchase.address.edit');
     Route::post('/purchase/{item_id}/address/update', [PurchaseController::class, 'updateAddress'])->name('purchase.address.update');
-    Route::get('/purchase/{item_id}/success', [PurchaseController::class, 'success'])->name('purchase.success');
-    Route::get('/purchase/{item_id}/cancel', [PurchaseController::class, 'cancel'])->name('purchase.cancel');
+
+    // 取引画面（リダイレクト先を変更）
+    Route::get('/trade/{trade}', [TradeController::class, 'show'])->name('trade.show');
 });
 
-// Stripe Webhook
-Route::post('/stripe/webhook', [StripeWebhookController::class, 'handleWebhook']);
+Route::middleware('auth')->prefix('mypage')->group(function () {
+    Route::get('/trades/{trade}', [TradeController::class, 'show'])->name('mypage.trades.show');
+});
 
 require __DIR__ . '/auth.php';

@@ -18,7 +18,15 @@
                     <h2>{{ $item->name }}</h2>
                     <p class="price">¥{{ number_format($item->price) }}</p>
                 </div>
+            </div>@if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
             </div>
+            @endif
 
             <div class="purchase-payment">
                 <h3>支払い方法</h3>
@@ -63,5 +71,21 @@
             <button type="submit" class="btn-purchase">購入する</button>
         </div>
     </form>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const paymentForm = document.getElementById('payment-form');
+            const select = document.querySelector('select[name="payment_method"]');
+            const hiddenInput = paymentForm.querySelector('input[name="payment_method"]');
+
+            paymentForm.addEventListener('submit', function(e) {
+                if (!select.value) {
+                    e.preventDefault(); // 送信ストップ
+                    alert('支払い方法を選択してください');
+                } else {
+                    hiddenInput.value = select.value; // hidden に値をセット
+                }
+            });
+        });
+    </script>
 </div>
 @endsection

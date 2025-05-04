@@ -5,11 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Item;
 use App\Models\Purchase;
+use App\Models\Trade;
 use App\Http\Requests\PurchaseRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use Stripe\Checkout\Session as StripeSession;
-use Stripe\Stripe;
 
 class PurchaseController extends Controller
 {
@@ -35,57 +34,36 @@ class PurchaseController extends Controller
             return redirect()->route('item.detail', $item_id);
         }
 
-        Stripe::setApiKey(env('STRIPE_SECRET'));
-
         try {
-            $paymentMethod = $request->input('payment_method');
+            $trade = Trade::create([
+                'item_id' => $item->id,
+                'buyer_id' => $user->id,
+                'seller_id' => $item->user_id,
+            ]);
 
-            if ($paymentMethod === 'カード払い') {
-                $session = StripeSession::create([
-                    'payment_method_types' => ['card'],
-                    'line_items' => [[
-                        'price_data' => [
-                            'currency' => 'jpy',
-                            'product_data' => ['name' => $item->name],
-                            'unit_amount' => $item->price,
-                        ],
-                        'quantity' => 1,
-                    ]],
-                    'mode' => 'payment',
-                    'success_url' => route('purchase.success', ['item_id' => $item->id]),
-                    'cancel_url' => route('purchase.cancel', ['item_id' => $item->id]),
-                ]);
+            Purchase::create([
+                'item_id' => $item->id,
+                'buyer_id' => $user->id,
+                'purchase_price' => $item->price,
+                'payment_method' => '銀行振込',
+                'address_id' => $user->profile->id,
+                'purchase_status' => 'pending',
+                'trade_id' => $trade->id,
+            ]);
 
-                return redirect($session->url);
-            } elseif ($paymentMethod === 'コンビニ払い'
-            ) {
-                $session = StripeSession::create([
-                    'payment_method_types' => ['konbini'],
-                    'line_items' => [[
-                        'price_data' => [
-                            'currency' => 'jpy',
-                            'product_data' => ['name' => $item->name],
-                            'unit_amount' => $item->price,
-                        ],
-                        'quantity' => 1,
-                    ]],
-                    'mode' => 'payment',
-                    'success_url' => route('purchase.success', ['item_id' => $item->id]),
-                    'cancel_url' => route('purchase.cancel', ['item_id' => $item->id]),
-                    'metadata' => [
-                        'item_id' => $item->id,
-                        'buyer_id' => $user->id,
-                    ],
-                ]);
+            $item->update(['status' => 'sold']);
 
-                return redirect($session->url);
-            } else {
-                return back()->withErrors(['payment_method' => '無効な支払い方法が選択されました。']);
-            }
+            return redirect()->route('trade.show', ['trade' => $trade->id]);
         } catch (\Exception $e) {
-            Log::error('決済エラー: ' . $e->getMessage());
-            return back()->withErrors(['error' => '決済の処理に失敗しました: ' . $e->getMessage()]);
+            Log::error('購入処理エラー: ' . $e->getMessage());
+            return back()->withErrors(['error' => '購入処理に失敗しました: ' . $e->getMessage()]);
         }
+    }
+
+    public function processing($item_id)
+    {
+        $item = Item::findOrFail($item_id);
+        return view('purchase_processing', compact('item'));
     }
 
     public function success($item_id)
@@ -93,18 +71,19 @@ class PurchaseController extends Controller
         $user = Auth::user();
         $item = Item::findOrFail($item_id);
 
-        Purchase::create([
-            'item_id' => $item->id,
-            'buyer_id' => $user->id,
-            'purchase_price' => $item->price,
-            'payment_method' => 'Stripe Checkout',
-            'address_id' => $user->profile->id,
-            'purchase_status' => 'completed',
-        ]);
+        $purchase = Purchase::where('item_id', $item->id)
+            ->where('buyer_id', $user->id)
+            ->where('purchase_status', 'completed')
+            ->firstOrFail();
 
         $item->update(['status' => 'sold']);
 
-        return redirect()->route('profile.index')->with('success', '購入が完了しました！');
+        if ($purchase->trade_id) {
+            return redirect()->route('mypage.trades.show', ['trade' => $purchase->trade_id])
+                ->with('success', '購入が完了しました！取引チャット画面に移動します。');
+        } else {
+            return redirect()->route('profile.index')->with('success', '購入が完了しましたが、取引チャットが見つかりませんでした。');
+        }
     }
 
     public function editAddress($item_id)
@@ -127,18 +106,18 @@ class PurchaseController extends Controller
         $request->validate([
             'zipcode' => ['required', 'regex:/^\d{3}-\d{4}$/'],
             'address' => ['required', 'string'],
-            'building' => ['required', 'string',],
+            'building' => ['required', 'string'],
         ], [
             'zipcode.required' => '郵便番号を入力してください。',
             'zipcode.regex' => '郵便番号は「XXX-XXXX」の形式で入力してください。',
             'address.required' => '住所を入力してください。',
             'building.required' => '建物名を入力してください。',
         ]);
+
         $user->profile->update($request->only(['zipcode', 'address', 'building']));
 
         return redirect()->route('purchase.show', ['item_id' => $item_id]);
     }
-
 
     public function cancel($item_id)
     {

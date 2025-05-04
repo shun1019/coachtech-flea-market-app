@@ -6,6 +6,7 @@ use App\Http\Requests\ProfileRequest;
 use App\Http\Requests\AddressRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Trade;
 
 class ProfileController extends Controller
 {
@@ -20,11 +21,24 @@ class ProfileController extends Controller
 
         $tab = request()->query('tab', 'sell');
 
+        $listedItems = $user->items()->paginate(8);
+        $purchasedItems = $user->purchases()->with('item')->paginate(8);
+
+        // 出品者 or 購入者 かつ 完了していない取引を対象に含める
+        $tradingTrades = Trade::with(['item', 'chatMessages'])
+            ->where(function ($query) use ($user) {
+                $query->where('buyer_id', $user->id)
+                    ->orWhere('seller_id', $user->id);
+            })
+            ->whereIn('status', ['processing', 'pending']) // completed以外に明示
+            ->get();
+
         return view('mypage.profile', [
-            'user'          => $user,
-            'listedItems'   => $user->items()->paginate(8),
-            'purchasedItems' => $user->purchases()->paginate(8),
-            'tab'           => $tab,
+            'user'            => $user,
+            'listedItems'     => $listedItems,
+            'purchasedItems'  => $purchasedItems,
+            'tradingTrades'   => $tradingTrades,
+            'tab'             => $tab,
         ]);
     }
 
