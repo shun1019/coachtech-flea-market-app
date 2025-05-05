@@ -50,7 +50,6 @@
     margin-left: 50px;
     color: #333;
     font-size: 16px;
-    transition: color 0.3s ease, border-bottom-color 0.3s ease;
 }
 
 .tabs a.active {
@@ -106,59 +105,26 @@
     text-transform: uppercase;
 }
 
-.pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    list-style: none;
-    padding: 0;
-    margin: 20px 0;
-}
-
-.pagination .page-item {
-    margin: 0 5px;
-}
-
-.pagination .page-link {
-    display: inline-block;
-    padding: 10px 15px;
-    color: #333;
-    text-decoration: none;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.pagination .page-link:hover {
-    background-color: #289adc;
-    color: white;
-    border-color: #289adc;
-}
-
-.pagination .active .page-link {
-    background-color: #289adc;
-    color: white;
-    border-color: #289adc;
-}
-
-.pagination .disabled .page-link {
-    color: #aaa;
-    cursor: not-allowed;
-    background-color: #f8f8f8;
-    border-color: #ddd;
-}
-
-svg.w-5.h-5 {
-    width: 30px;
-    height: 30px;
+.badge {
+    background-color: rgb(255, 14, 14);
+    color: #fff;
+    font-size: 15px;
+    font-weight: bold;
+    border-radius: 25%;
+    width: 20px;
+    height: 20px;
+    padding-bottom: 2px;
+    position: absolute;
+    text-align: center;
+    margin-left: 5px;
 }
 
 .notification-badge {
     position: absolute;
     top: 5px;
     left: 5px;
-    background-color: red;
-    color: white;
+    background-color: rgb(255, 14, 14);
+    color: #fff;
     font-size: 12px;
     font-weight: bold;
     border-radius: 50%;

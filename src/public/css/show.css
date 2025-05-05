@@ -151,6 +151,7 @@
 .message-text {
     font-size: 14px;
     padding: 0 0 15px 0;
+    margin-top: 10px;
 }
 
 .user-avatar img {
@@ -160,7 +161,7 @@
 }
 
 .own-message {
-    flex-direction: row-reverse;
+    flex-direction: row-reverse;    text-align: end;
 }
 
 .other-message {

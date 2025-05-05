@@ -28,11 +28,16 @@
     <main class="trade-header">
         <div class="header-area">
             <div class="header-left">
-                @if($trade->seller->profile && $trade->seller->profile->profile_image)
-                <img src="{{ Storage::url($trade->seller->profile->profile_image) }}" alt="プロフィール画像" class="profile-avatar">
+                @php
+                $otherUser = $trade->buyer_id === Auth::id() ? $trade->seller : $trade->buyer;
+                @endphp
+
+                @if($otherUser->profile && $otherUser->profile->profile_image)
+                <img src="{{ Storage::url($otherUser->profile->profile_image) }}" alt="プロフィール画像" class="profile-avatar">
                 @endif
+
                 <h2 class="trade-title">
-                    「{{ $trade->buyer->id === Auth::id() ? $trade->seller->username : $trade->buyer->username }}」さんとの取引画面
+                    「{{ $otherUser->username }}」さんとの取引画面
                 </h2>
             </div>
 
@@ -143,7 +148,9 @@
             <form action="{{ route('chat.store', $trade->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="chat-box">
-                    <input type="text" name="body" class="message-input" placeholder="取引メッセージを記入してください" value="{{ old('body') }}">
+                    <input type="text" name="body" class="message-input"
+                        placeholder="取引メッセージを記入してください"
+                        value="{{ old('body', session("chat_draft_{$trade->id}")) }}">
                     <label for="file-upload-new" class="file-label">画像を選択する</label>
                     <input type="file" name="image" id="file-upload-new" class="file-input">
                     <button type="submit" class="send-icon-btn">

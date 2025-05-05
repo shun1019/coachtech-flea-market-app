@@ -6,6 +6,7 @@ use App\Models\ChatMessage;
 use App\Models\Trade;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Session;
 use App\Http\Requests\ChatMessageRequest;
 
 class ChatController extends Controller
@@ -29,19 +30,10 @@ class ChatController extends Controller
 
         $message->save();
 
+        // 下書きセッションは削除（送信後は不要になるため）
+        Session::forget("draft_message_{$trade->id}");
+
         return redirect()->route('trade.show', ['trade' => $trade->id]);
-    }
-
-    /**
-     * 編集画面表示
-     */
-    public function edit(ChatMessage $message)
-    {
-        if ($message->user_id !== Auth::id()) {
-            abort(403);
-        }
-
-        return view('chat.edit', compact('message'));
     }
 
     /**
@@ -88,5 +80,16 @@ class ChatController extends Controller
 
         return redirect()->route('trade.show', ['trade' => $tradeId])
             ->with('success', 'メッセージを削除しました。');
+    }
+
+    /**
+     * チャット本文の下書きをセッションに保存
+     */
+    public function saveDraft(Trade $trade)
+    {
+        $body = request('body');
+        Session::put("draft_message_{$trade->id}", $body);
+
+        return response()->json(['status' => 'ok']);
     }
 }

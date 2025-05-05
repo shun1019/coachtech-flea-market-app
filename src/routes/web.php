@@ -17,13 +17,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/sell', [ItemController::class, 'create'])->name('sell');
     Route::post('/sell', [ItemController::class, 'store'])->name('store');
 
-    // 取引完了処理のためのルート
+    // 取引完了処理のルート
     Route::post('/trade/{trade}/complete', [TradeController::class, 'complete'])->name('trade.complete');
 
-    // チャット送信・編集・削除ルート
+    // チャット送信・編集・削除・下書き保存ルート
     Route::post('/trade/{trade}/chat', [ChatController::class, 'store'])->name('chat.store');
     Route::put('/chat/{message}', [ChatController::class, 'update'])->name('chat.update');
     Route::delete('/chat/{message}', [ChatController::class, 'destroy'])->name('chat.destroy');
+    Route::post('/trade/{trade}/chat/draft', [ChatController::class, 'saveDraft'])->name('chat.draft');
 });
 
 // コメント機能
@@ -37,6 +38,7 @@ Route::middleware(['auth', 'verified'])->prefix('mypage')->group(function () {
     Route::get('/', [ProfileController::class, 'index'])->name('profile.index');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/trades/{trade}', [TradeController::class, 'show'])->name('mypage.trades.show');
 });
 
 // 購入機能（認証必須）
@@ -46,12 +48,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/purchase/{item_id}/address/edit', [PurchaseController::class, 'editAddress'])->name('purchase.address.edit');
     Route::post('/purchase/{item_id}/address/update', [PurchaseController::class, 'updateAddress'])->name('purchase.address.update');
 
-    // 取引画面（リダイレクト先を変更）
+    // 取引画面
     Route::get('/trade/{trade}', [TradeController::class, 'show'])->name('trade.show');
-});
-
-Route::middleware('auth')->prefix('mypage')->group(function () {
-    Route::get('/trades/{trade}', [TradeController::class, 'show'])->name('mypage.trades.show');
 });
 
 require __DIR__ . '/auth.php';

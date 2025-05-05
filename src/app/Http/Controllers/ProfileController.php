@@ -24,13 +24,14 @@ class ProfileController extends Controller
         $listedItems = $user->items()->paginate(8);
         $purchasedItems = $user->purchases()->with('item')->paginate(8);
 
-        // 出品者 or 購入者 かつ 完了していない取引を対象に含める
         $tradingTrades = Trade::with(['item', 'chatMessages'])
             ->where(function ($query) use ($user) {
                 $query->where('buyer_id', $user->id)
                     ->orWhere('seller_id', $user->id);
             })
-            ->whereIn('status', ['processing', 'pending']) // completed以外に明示
+            ->whereIn('status', ['processing', 'pending'])
+            ->withMax('chatMessages as last_message_at', 'updated_at')
+            ->orderByDesc('last_message_at')
             ->get();
 
         return view('mypage.profile', [
