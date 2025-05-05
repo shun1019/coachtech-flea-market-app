@@ -6,6 +6,7 @@ use App\Http\Requests\ProfileRequest;
 use App\Http\Requests\AddressRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 use App\Models\Trade;
 
 class ProfileController extends Controller
@@ -34,12 +35,24 @@ class ProfileController extends Controller
             ->orderByDesc('last_message_at')
             ->get();
 
+        // 評価平均の算出
+        $averageRating = Trade::where('status', 'completed')
+            ->where(function ($query) use ($user) {
+                $query->where('buyer_id', $user->id)
+                    ->orWhere('seller_id', $user->id);
+            })
+            ->whereNotNull('rating')
+            ->avg('rating');
+
+        $averageRating = $averageRating !== null ? round($averageRating) : null;
+
         return view('mypage.profile', [
             'user'            => $user,
             'listedItems'     => $listedItems,
             'purchasedItems'  => $purchasedItems,
             'tradingTrades'   => $tradingTrades,
             'tab'             => $tab,
+            'averageRating'   => $averageRating,
         ]);
     }
 

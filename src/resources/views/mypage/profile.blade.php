@@ -13,6 +13,11 @@
         <img src="{{ Storage::url($user->profile->profile_image) }}" alt="プロフィール画像" class="profile-avatar">
         @endif
         <h2 class="profile-name">{{ $user->username }}</h2>
+
+        @if(isset($averageRating))
+        <p class="average-rating">評価平均：{{ $averageRating }} / 5</p>
+        @endif
+
         <a href="{{ route('profile.edit') }}" class="edit-profile-btn">プロフィールを編集</a>
     </div>
 
