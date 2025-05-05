@@ -132,7 +132,6 @@
             @endforeach
         </div>
 
-        <!-- バリデーションエラー表示 -->
         @if ($errors->any())
         <div class="validation-errors">
             <ul>

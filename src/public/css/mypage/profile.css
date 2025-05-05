@@ -19,7 +19,6 @@
 }
 
 .profile-name {
-    font-size: 36px;
     flex-grow: 1;
     text-align: left;
 }
@@ -139,7 +138,6 @@
 .average-rating {
     font-size: 16px;
     color: #0015ffff;
-    margin-top: 5px;
     font-weight: bold;
     margin-right: 40px;
     border-bottom: 2px solid #0015ffff;

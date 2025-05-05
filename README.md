@@ -6,13 +6,31 @@ coachtech-flea-market-app
 
 このアプリケーションは、ユーザー間で商品を売買できるフリーマーケットプラットフォームです。
 
-### **主な機能**
+## **主な機能**
 
-- ユーザー登録・ログイン（メール認証対応）
-- 商品の出品・管理
-- 商品の購入（クレジットカード・コンビニ支払い対応）
-- コメント・いいね機能
-- 商品のカテゴリー管理
+### 商品機能
+- 商品の出品・編集・削除
+- 商品の購入（Stripe決済対応）
+- 商品詳細ページでのコメント・いいね機能
+- 商品カテゴリーによる分類・表示
+
+### ユーザー機能
+- 会員登録・ログイン
+- プロフィール編集（住所・建物名・画像）
+- マイページ機能（出品・購入・取引中タブ）
+
+### 取引・チャット機能
+- 出品者・購入者間の個別チャット機能（画像付き送信可）
+- チャットメッセージの編集・削除機能
+- メッセージ入力中の下書き保存（セッションにより一時保持）
+- 取引完了後の評価（5段階）とモーダル表示
+- チャットの未読メッセージ通知（件数表示バッジ付き）
+- 取引中一覧の自動ソート（最新メッセージ順）
+
+### その他
+- MailHogによるメール確認（開発環境）
+- エラーメッセージのバリデーション表示
+- テストデータのSeeder導入済み
 
 ---
 
@@ -69,12 +87,6 @@ coachtech-flea-market-app
 4. 環境変数を設定・追加:
 
    ```env
-   APP_NAME=Laravel
-   APP_ENV=local
-   APP_KEY=base64:FA0/obGVuwXyhgnCfBqJNjVMvnqPb6wwlqAF9Z5w3HU=
-   APP_DEBUG=true
-   APP_URL=${NGROK_URL:-http://localhost}
-
    DB_CONNECTION=mysql
    DB_HOST=mysql
    DB_PORT=3306
@@ -90,10 +102,6 @@ coachtech-flea-market-app
    MAIL_ENCRYPTION=null
    MAIL_FROM_ADDRESS=example@example.com
    MAIL_FROM_NAME="${APP_NAME}"
-
-   STRIPE_KEY=pk_test_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-   STRIPE_SECRET=sk_test_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-   STRIPE_WEBHOOK_SECRET=whsec_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
    ```
 
 5. アプリケーションキーを生成:
@@ -134,45 +142,6 @@ coachtech-flea-market-app
 
 ---
 
-### **決済機能（Stripe 導入）**
-
-このアプリケーションでは、**Stripe** を使用して商品を購入できます。
-クレジットカード払いとコンビニ支払いに対応しています。
-
-#### **決済の流れ:**
-
-    1.	商品購入ページで「カード払い」または「コンビニ払い」を選択
-    2.	カード払い: クレジットカード情報を入力して決済
-    3.   コンビニ払い: 「ローソン」「ファミリーマート」「セイコーマート」「ミニストップ」から選択
-    4.	「購入する」ボタンをクリックし、決済を完了
-
-#### **開発用テスト手順:**
-
-1. `ngrok` を起動し、Webhook を有効化（別ターミナルで実行）:
-
-   ```bash
-   stripe listen --forward-to http://localhost/webhook/stripe
-   ```
-
-2. 環境変数 `APP_URL` を ngrok URL に更新 (`.env` ファイル):
-
-   ```env
-   APP_URL=https://your-ngrok-url.ngrok-free.app
-   ```
-
-3. 設定を反映:
-
-   ```bash
-   php artisan config:clear
-   ```
-
-4. Stripe のテストイベントを送信して動作確認:
-   ```bash
-   stripe trigger payment_intent.succeeded
-   ```
-
----
-
 ### **メール認証（MailHog の使用）**
 
 このアプリケーションでは、メール認証に **MailHog** を使用します。
@@ -183,46 +152,32 @@ Docker コンテナを起動すると、MailHog も自動的に起動します�
 
 #### **メール確認手順**
 
-1. ユーザー登録後、認証メールが送信される
+1. ユーザー登録後、下記のURLに認証メールが送信される
 2. MailHog にアクセス：http://localhost:8025
 3. メールを開き、認証リンクをクリックして完了
 
-### **ngrok のセットアップ（Webhook / 外部アクセス用）**
+## **取引完了メール通知**
 
-1. ngrok をインストールしていない場合
+商品購入者が「取引完了」操作を行うと、出品者に対して通知メールが自動送信されます。
 
-   ```bash
-   brew install ngrok
-   ```
+メール確認方法
+1.	購入者が「取引完了」をクリック
+2.	出品者に通知メールが送信される
+3.	MailHog（http://localhost:8025）で内容確認
 
-2. ngrok を起動（別ターミナルで実行）
+## **テストユーザー情報**
 
-```bash
-ngrok http 80
-```
+初期データとして、以下のテストユーザーが作成されます（`php artisan db:seed` 実行時）。
 
-3. 表示された public_url を .env に設定
+| ユーザー名 | メールアドレス        | パスワード | 郵便番号   | 住所                    |
+|------------|------------------------|------------|------------|--------------------------|
+| ユーザー1  | user1@example.com       | password   | 123-0001   | 東京都千代田区1-1-1     |
+| ユーザー2  | user2@example.com       | password   | 456-0002   | 大阪府大阪市中央区2-2-2 |
+| ユーザー3  | user3@example.com       | password   | 789-0003   | 福岡県福岡市博多区3-3-3 |
 
-```bash
-NGROK_URL=https://your-ngrok-url.ngrok-free.app
-```
-
-4. 設定を反映
-
-```bash
-php artisan config:clear
-```
-
-5. Docker コンテナ内で ngrok に接続できるか確認
-
-```bash
-docker exec -it {PHPコンテナ名} bash
-curl -v http://host.docker.internal:4040/api/tunnels
-```
-
-200 OK が返ってくれば成功！
-
----
+- すべてのユーザーはメール認証済みです。
+- パスワードは全員共通で `password`。
+- 任意でプロフィール画像の登録も可能です。
 
 ## 使用技術(実行環境)
 
@@ -232,8 +187,6 @@ curl -v http://host.docker.internal:4040/api/tunnels
 - MySQL 8.0.26
 - Laravel Fortify: 1.19
 - MailHog
-- Stripe
-- ngrok（外部アクセス / Webhook 用）
 
 ## ER 図
 

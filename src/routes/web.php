@@ -18,7 +18,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/sell', [ItemController::class, 'store'])->name('store');
 
     // 取引完了処理のルート
-    Route::post('/trade/{trade}/complete', [TradeController::class, 'complete'])->name('trade.complete');
+    Route::get('/trade/{trade}/complete', [TradeController::class, 'complete'])->name('trade.complete');
 
     // チャット送信・編集・削除・下書き保存ルート
     Route::post('/trade/{trade}/chat', [ChatController::class, 'store'])->name('chat.store');

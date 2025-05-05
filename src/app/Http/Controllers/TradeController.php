@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Trade;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\TradeCompletedNotification;
 
 class TradeController extends Controller
 {
@@ -60,8 +61,9 @@ class TradeController extends Controller
         $trade->status = 'completed';
         $trade->save();
 
-        return redirect()
-            ->route('index')
-            ->with('success', '取引が完了しました');
+        $seller = $trade->seller;
+        $seller->notify(new TradeCompletedNotification($trade));
+
+        return redirect()->route('index')->with('success', '取引が完了しました。出品者に通知を送りました。');
     }
 }
