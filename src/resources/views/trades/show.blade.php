@@ -72,8 +72,10 @@
         <div class="item-info">
             <div class="item-box">
                 <img src="{{ asset('storage/' . $item->image) }}" alt="商品画像" class="item-image">
-                <h5 class="item-name">{{ $item->name }}</h5>
-                <p class="item-price">{{ number_format($item->price) }}円</p>
+                <div class="item-detail">
+                    <h5 class="item-name">{{ $item->name }}</h5>
+                    <p class="item-price">{{ number_format($item->price) }}円</p>
+                </div>
             </div>
         </div>
 
@@ -150,7 +152,7 @@
                     <input type="text" name="body" class="message-input"
                         placeholder="取引メッセージを記入してください"
                         value="{{ old('body', session("chat_draft_{$trade->id}")) }}">
-                    <label for="file-upload-new" class="file-label">画像を選択する</label>
+                    <label for="file-upload-new" class="file-label">画像を追加</label>
                     <input type="file" name="image" id="file-upload-new" class="file-input">
                     <button type="submit" class="send-icon-btn">
                         <img src="{{ asset('storage/image/チャット送信アイコン.jpg') }}" alt="送信" class="send-icon">
