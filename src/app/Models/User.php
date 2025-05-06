@@ -47,4 +47,33 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Purchase::class, 'buyer_id');
     }
+
+    public function receivedRatings()
+    {
+        return $this->hasManyThrough(
+            Rating::class,
+            Trade::class,
+            'buyer_id',
+            'trade_id',
+            'id',
+            'id'
+        )->where('rater_id', '!=', $this->id)
+            ->orWhereHas('trade', function ($query) {
+                $query->where('seller_id', $this->id);
+            });
+    }
+
+    public function getAverageRatingAttribute()
+    {
+        $ratings = Rating::whereHas('trade', function ($query) {
+            $query->where('buyer_id', $this->id)
+                ->orWhere('seller_id', $this->id);
+        })->where('rater_id', '!=', $this->id)->pluck('rate');
+
+        if ($ratings->isEmpty()) {
+            return null;
+        }
+
+        return round($ratings->average());
+    }
 }

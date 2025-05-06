@@ -8,7 +8,6 @@
 
 @section('content')
 <div class="trade-container">
-    <!-- サイドバー -->
     <aside class="sidebar-nav">
         <h3 class="sidebar-title">その他の取引</h3>
         <ul class="nav-list">
@@ -29,24 +28,32 @@
         <div class="header-area">
             <div class="header-left">
                 @php
-                $otherUser = $trade->buyer_id === Auth::id() ? $trade->seller : $trade->buyer;
+                $userId = Auth::id();
+                $isBuyer = $trade->buyer_id === $userId;
+                $isSeller = $trade->seller_id === $userId;
+                $hasRated = $trade->ratings->where('rater_id', $userId)->isNotEmpty();
+                $buyerHasRated = $trade->ratings->where('rater_id', $trade->buyer_id)->isNotEmpty();
+                $showModal = !$hasRated && (
+                ($isBuyer && request()->query('rate')) ||
+                ($isSeller && session('show_rating_modal'))
+                );
+                $otherUser = $isBuyer ? $trade->seller : $trade->buyer;
                 @endphp
 
                 @if($otherUser->profile && $otherUser->profile->profile_image)
                 <img src="{{ Storage::url($otherUser->profile->profile_image) }}" alt="プロフィール画像" class="profile-avatar">
                 @endif
 
-                <h2 class="trade-title">
-                    「{{ $otherUser->username }}」さんとの取引画面
-                </h2>
+                <h2 class="trade-title">「{{ $otherUser->username }}」さんとの取引画面</h2>
             </div>
 
-            @if(request()->query('rate'))
+            {{-- 評価モーダル --}}
+            @if($showModal)
             <div class="rating-modal-overlay">
                 <div class="rating-modal">
                     <p class="rating-title">取引が完了しました。</p>
                     <p class="rating-subtitle">今回の取引相手はどうでしたか？</p>
-                    <form action="{{ route('trade.complete', $trade->id) }}" method="POST">
+                    <form action="{{ route('trade.rate', $trade->id) }}" method="POST">
                         @csrf
                         <div class="star-rating">
                             @for($i = 5; $i >= 1; $i--)
@@ -60,15 +67,17 @@
                     </form>
                 </div>
             </div>
-            @else
+            @elseif($isBuyer && !$hasRated && $trade->status !== 'completed')
             <form method="GET" action="{{ route('trade.show', ['trade' => $trade->id]) }}">
                 <input type="hidden" name="rate" value="1">
                 <button type="submit" class="complete-btn">取引を完了する</button>
             </form>
+            @elseif($hasRated)
+            <div class="complete-btn" style="background-color: #ccc; cursor: default;">評価済み</div>
             @endif
         </div>
 
-        <!-- 商品情報 -->
+        {{-- 商品情報 --}}
         <div class="item-info">
             <div class="item-box">
                 <img src="{{ asset('storage/' . $item->image) }}" alt="商品画像" class="item-image">
@@ -79,14 +88,12 @@
             </div>
         </div>
 
-        <!-- チャットメッセージ一覧 -->
+        {{-- チャットメッセージ --}}
         <div class="message-area">
             @foreach($chatMessages as $message)
-            @php
-            $isSeller = $message->user_id === $trade->seller_id;
-            @endphp
-            <div class="message-box mb-3 {{ $isSeller ? 'text-left' : 'text-right' }}">
-                <div class="message-content {{ $isSeller ? 'other-message' : 'own-message' }}">
+            @php $isSellerMessage = $message->user_id === $trade->seller_id; @endphp
+            <div class="message-box mb-3 {{ $isSellerMessage ? 'text-left' : 'text-right' }}">
+                <div class="message-content {{ $isSellerMessage ? 'other-message' : 'own-message' }}">
                     @if($message->user->profile && $message->user->profile->profile_image)
                     <div class="user-avatar">
                         <img src="{{ asset('storage/' . $message->user->profile->profile_image) }}" class="profile-image" alt="プロフィール画像">
@@ -104,7 +111,7 @@
 
                         <div class="message-text">{{ $message->body }}</div>
 
-                        @if (Auth::id() === $message->user_id)
+                        @if ($message->user_id === $userId)
                         <div class="message-actions">
                             <form method="GET" action="{{ route('trade.show', ['trade' => $trade->id]) }}">
                                 <input type="hidden" name="edit" value="{{ $message->id }}">
@@ -144,7 +151,7 @@
         </div>
         @endif
 
-        <!-- 入力フォーム -->
+        {{-- チャットフォーム --}}
         <div class="message-form">
             <form action="{{ route('chat.store', $trade->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Rating;
 
 class Trade extends Model
 {
@@ -46,7 +47,7 @@ class Trade extends Model
      */
     public function chatMessages()
     {
-        return $this->hasMany(ChatMessage::class)->orderBy('created_at'); // 作成日時順に取得
+        return $this->hasMany(ChatMessage::class)->orderBy('created_at');
     }
 
     /**
@@ -55,5 +56,21 @@ class Trade extends Model
     public function latestMessage()
     {
         return $this->hasOne(ChatMessage::class)->latestOfMany();
+    }
+
+    /**
+     * 評価とのリレーション
+     */
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
+    }
+
+    /**
+     * 両者から評価されたか判定
+     */
+    public function isFullyRated()
+    {
+        return $this->ratings()->count() === 2;
     }
 }

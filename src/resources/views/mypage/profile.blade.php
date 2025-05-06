@@ -12,12 +12,20 @@
         @if($user->profile && $user->profile->profile_image)
         <img src="{{ Storage::url($user->profile->profile_image) }}" alt="プロフィール画像" class="profile-avatar">
         @endif
+        <div class="profile-group">
         <h2 class="profile-name">{{ $user->username }}</h2>
-
-        @if(isset($averageRating))
-        <p class="average-rating">評価平均：{{ $averageRating }} / 5</p>
+        @if(isset($user->average_rating))
+        <p class="average-rating">
+            @for($i = 1; $i <= 5; $i++)
+                @if($i <=$user->average_rating)
+                ★
+                @else
+                ☆
+                @endif
+                @endfor
+        </p>
         @endif
-
+        </div>
         <a href="{{ route('profile.edit') }}" class="edit-profile-btn">プロフィールを編集</a>
     </div>
 

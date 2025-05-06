@@ -136,11 +136,14 @@
 }
 
 .average-rating {
-    font-size: 16px;
-    color: #0015ffff;
-    font-weight: bold;
-    margin-right: 40px;
-    border-bottom: 2px solid #0015ffff;
+    font-size: 20px;
+    color: #ffe100;
+    margin: 10px;
+    padding: 5px 10px;
+}
+
+.profile-group {
+    flex: auto;
 }
 
 /* ==============================
@@ -187,7 +190,6 @@
     width: 16px;
     height: 16px;
 }
-
 
 .sold-label {
     font-size: 10px;

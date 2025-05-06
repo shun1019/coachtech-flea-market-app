@@ -22,8 +22,8 @@ Route::middleware('auth')->group(function () {
     // 取引画面
     Route::get('/trade/{trade}', [TradeController::class, 'show'])->name('trade.show');
 
-    // 評価
-    Route::post('/trade/{trade}/complete', [TradeController::class, 'complete'])->name('trade.complete');
+    // 評価（双方向対応）
+    Route::post('/trade/{trade}/rate', [TradeController::class, 'rate'])->name('trade.rate');
 
     // チャット
     Route::post('/trade/{trade}/chat', [ChatController::class, 'store'])->name('chat.store');
