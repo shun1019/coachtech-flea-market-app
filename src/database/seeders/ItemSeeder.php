@@ -10,13 +10,14 @@ class ItemSeeder extends Seeder
 {
     public function run()
     {
-        $users = User::all();
+        $user1 = User::where('email', 'user1@example.com')->first();
+        $user2 = User::where('email', 'user2@example.com')->first();
 
-        if ($users->isEmpty()) {
+        if (!$user1 || !$user2) {
             return;
         }
 
-        $items = [
+        $itemsUser1 = [
             [
                 'name' => '腕時計',
                 'price' => 15000,
@@ -57,6 +58,14 @@ class ItemSeeder extends Seeder
                 'condition' => '良好',
                 'status' => 'available',
             ],
+        ];
+
+        foreach ($itemsUser1 as $item) {
+            $item['user_id'] = $user1->id;
+            Item::create($item);
+        }
+
+        $itemsUser2 = [
             [
                 'name' => 'マイク',
                 'price' => 8000,
@@ -99,8 +108,8 @@ class ItemSeeder extends Seeder
             ],
         ];
 
-        foreach ($items as $item) {
-            $item['user_id'] = $users->random()->id;
+        foreach ($itemsUser2 as $item) {
+            $item['user_id'] = $user2->id;
             Item::create($item);
         }
     }

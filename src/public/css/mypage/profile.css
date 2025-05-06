@@ -148,7 +148,6 @@
 ================================= */
 @media (min-width: 768px) and (max-width: 850px) {
     .profile-header {
-        flex-direction: column;
         padding: 30px 20px;
     }
 
@@ -161,6 +160,7 @@
 
     .profile-name {
         font-size: 28px;
+        margin-left: 20px;
     }
 
     .edit-profile-btn {
@@ -175,6 +175,27 @@
     }
 }
 
+.tabs a {
+    margin-left: 30px;
+    font-size: 12px;
+}
+
+.badge {
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 25%;
+    width: 16px;
+    height: 16px;
+}
+
+
+.sold-label {
+    font-size: 10px;
+}
+
+.items-grid {
+    font-size: 12px;
+}
 /* ==============================
    PC (1400px - 1540px)
 ================================= */

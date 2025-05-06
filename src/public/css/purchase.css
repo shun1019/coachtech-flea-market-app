@@ -116,7 +116,7 @@
 ================================= */
 @media (min-width: 768px) and (max-width: 850px) {
     .purchase-container {
-        margin: 40px;
+        margin: 10px;
     }
 
     .purchase-form {
@@ -151,7 +151,7 @@
 
     .summary-box {
         width: 100%;
-        margin-bottom: 15px;
+        margin: 15px 0;
     }
 
     .btn-purchase {
